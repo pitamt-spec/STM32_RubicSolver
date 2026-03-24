@@ -96,6 +96,18 @@ void Motor_RunMove(Motor *mmotor, uint32_t steps)
     //Motor_DisableAll();
 }
 
+
+/*The interupt that counts up to fifity.*/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == TIM4)
+	{
+	    step_count++;
+	    if (step_count >= step_target)
+	        stepper_done = 1;
+	}
+}
+
 /* All motors share TIM4 for step generation.
  * Motor selection is handled by the mux.
  */
