@@ -163,6 +163,13 @@ int main(void)
   TestSuite_Init(&m1, &m2);
   //TODO remove button debug logic
   uint8_t button_was_pressed = 0;
+
+
+
+  Displ_Init(Displ_Orientat_180);			// initialize display controller
+  Displ_CLS(BLACK);						// clear the screen
+  Displ_BackLight('I');  					// initialize backlight
+  Displ_BackLight('1');					// light-up display ad max light level
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -627,8 +634,6 @@ static void MX_TIM15_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   /* USER CODE BEGIN TIM15_Init 1 */
 
@@ -649,42 +654,15 @@ static void MX_TIM15_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim15) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim15, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim15, &sBreakDeadTimeConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM15_Init 2 */
 
   /* USER CODE END TIM15_Init 2 */
-  HAL_TIM_MspPostInit(&htim15);
 
 }
 
@@ -719,7 +697,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, DISPL_RST_Pin|TOUCH_CS_Pin|STPR_EN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, DISPL_DC_Pin|STPR_D6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, DISPL_DC_Pin|STPR_D6_Pin|DISPL_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
@@ -748,9 +726,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DISPL_RST_Pin DISPL_DC_Pin TOUCH_CS_Pin STPR_EN_Pin
-                           STPR_D6_Pin */
+                           STPR_D6_Pin DISPL_LED_Pin */
   GPIO_InitStruct.Pin = DISPL_RST_Pin|DISPL_DC_Pin|TOUCH_CS_Pin|STPR_EN_Pin
-                          |STPR_D6_Pin;
+                          |STPR_D6_Pin|DISPL_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

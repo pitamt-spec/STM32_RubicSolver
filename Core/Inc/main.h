@@ -87,8 +87,8 @@ void Error_Handler(void);
 #define STPR_EN_GPIO_Port GPIOF
 #define STPR_D6_Pin GPIO_PIN_8
 #define STPR_D6_GPIO_Port GPIOF
-#define DISP_LED_Pin GPIO_PIN_9
-#define DISP_LED_GPIO_Port GPIOF
+#define DISPL_LED_Pin GPIO_PIN_9
+#define DISPL_LED_GPIO_Port GPIOF
 #define DEMUX_S0_Pin GPIO_PIN_0
 #define DEMUX_S0_GPIO_Port GPIOC
 #define DEMUX_S2_Pin GPIO_PIN_1

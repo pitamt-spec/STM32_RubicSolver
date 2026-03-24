@@ -44,7 +44,7 @@
  ***** If external flash handled by TOUCHGFX,******
  ************* let #define commented **************
  **************************************************/
-#define EXT_FLASH_BASEADDRESS 0X90000000 // mapped flash base address
+// #define EXT_FLASH_BASEADDRESS 0X90000000 // mapped flash base address
 
 
 /*****************     STEP 1      *****************
@@ -59,8 +59,8 @@
  * which display are you using?
  *************************************************/
 //#define ILI9341
-//#define ILI9488_V1
-#define ILI9488_V2
+#define ILI9488_V1
+//#define ILI9488_V2
 
 
 /******************    STEP 3    ******************
@@ -108,7 +108,7 @@
  * let timer clock to be higher than COUNTER PERIOD * 100 Hz.
  * Set all other defines below
  ***************************************************/
-#define DISPLAY_DIMMING_MODE						// uncomment this define to enable dimming function otherwise there is an on/off switching function
+//#define DISPLAY_DIMMING_MODE						// uncomment this define to enable dimming function otherwise there is an on/off switching function
 #define BKLIT_TIMER 				TIM2			//timer used (PWMming DISPL_LED pin)
 #define BKLIT_T 					htim2			//timer used
 #define BKLIT_CHANNEL				TIM_CHANNEL_1	//channel used
@@ -213,8 +213,8 @@ typedef enum {
 } Displ_Orientat_e;
 
 
-#define SPI_COMMAND 	GPIO_PIN_RESET  	//DISPL_DC_Pin level sending commands
-#define SPI_DATA 		GPIO_PIN_SET		//DISPL_DC_Pin level sending data
+#define SPI_COMMAND     GPIO_PIN_RESET      // DISPL_DC_Pin level for commands
+#define SPI_DATA        GPIO_PIN_SET        // DISPL_DC_Pin level for data
 
 // set the buffers size as per BUFLEVEL and DISPLAY_USING_TOUCHGFX
 // (if using TouchGFX, don't buffers from this library)
