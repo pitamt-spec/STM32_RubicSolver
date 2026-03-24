@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "motor.h"
 #include "test_suite.h"
+#include "Neo_Pixel.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -202,7 +203,7 @@ int main(void)
 
 			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
 				button_was_pressed = 1;
-				TestSuite_RunOnce();
+				Test_WS2812_RunOnce();
 			}
 		}
 		else if (button_now == GPIO_PIN_SET){
