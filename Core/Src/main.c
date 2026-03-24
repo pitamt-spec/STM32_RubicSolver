@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "motor.h"
+#include "test_suite.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -153,7 +155,14 @@ int main(void)
   MX_USART2_UART_Init();
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  Motor m1;
+  Motor m2;
 
+  Motor_Init(&htim4, &m1, MOTOR_1);
+  Motor_Init(&htim4, &m2, MOTOR_2);
+  TestSuite_Init(&m1, &m2);
+  //TODO remove button debug logic
+  uint8_t button_was_pressed = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -180,6 +189,24 @@ int main(void)
 	  default: // else
 		  mode4();
 		  break;
+
+
+
+	  // MOTOR CODE BELOW (this needs to move eventually)
+	  // TODO place motor code in correct spot and remove button debug
+		  GPIO_PinState button_now = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+		if (button_now == GPIO_PIN_RESET && button_was_pressed == 0){
+			HAL_Delay(20); // debounce
+
+			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
+				button_was_pressed = 1;
+				TestSuite_RunOnce();
+			}
+		}
+		else if (button_now == GPIO_PIN_SET){
+			button_was_pressed = 0;
+		}
+		HAL_Delay(10);
 	  }
 
 
@@ -695,10 +722,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, DISPL_DC_Pin|STPR_D6_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DISPL_CS_GPIO_Port, DISPL_CS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LED_RED_Pin|LED_BLUE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : STPR_D1_Pin STPR_D5_Pin STPR_D2_Pin STPR_D3_Pin
                            STPR_D4_Pin */
@@ -732,8 +762,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(TOUCH_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DEMUX_S0_Pin DEMUX_S2_Pin DEMUX_S1_Pin */
-  GPIO_InitStruct.Pin = DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin;
+  /*Configure GPIO pins : DEMUX_S0_Pin DEMUX_S2_Pin DEMUX_S1_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -784,6 +814,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF13_SAI2;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED_RED_Pin LED_BLUE_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_BLUE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PD8 PD9 */

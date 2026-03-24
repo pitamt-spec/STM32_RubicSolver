@@ -93,6 +93,10 @@ void Error_Handler(void);
 #define PTMTR_OUT_GPIO_Port GPIOA
 #define DISPL_CS_Pin GPIO_PIN_0
 #define DISPL_CS_GPIO_Port GPIOG
+#define LED_RED_Pin GPIO_PIN_14
+#define LED_RED_GPIO_Port GPIOB
+#define LED_GREEN_Pin GPIO_PIN_7
+#define LED_GREEN_GPIO_Port GPIOC
 #define LED_TIM_Pin GPIO_PIN_8
 #define LED_TIM_GPIO_Port GPIOC
 #define TOUCH_SCK_Pin GPIO_PIN_10
@@ -107,6 +111,8 @@ void Error_Handler(void);
 #define LCD_MISO_GPIO_Port GPIOD
 #define LCD_MOSI_Pin GPIO_PIN_4
 #define LCD_MOSI_GPIO_Port GPIOD
+#define LED_BLUE_Pin GPIO_PIN_7
+#define LED_BLUE_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
