@@ -31,7 +31,12 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "fonts.h"
+#include "z_displ_ILI9XXX.h" // DRAWING FUNCTIONALITY
+#include "z_displ_ILI9XXX_test.h"
+#include "z_touch_XPT2046.h"
+#include "z_touch_XPT2046_test.h"
+#include "z_touch_XPT2046_menu.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -77,6 +82,7 @@ void Error_Handler(void);
 #define TOUCH_CS_GPIO_Port GPIOF
 #define TOUCH_INT_Pin GPIO_PIN_5
 #define TOUCH_INT_GPIO_Port GPIOF
+#define TOUCH_INT_EXTI_IRQn EXTI9_5_IRQn
 #define STPR_EN_Pin GPIO_PIN_7
 #define STPR_EN_GPIO_Port GPIOF
 #define STPR_D6_Pin GPIO_PIN_8
@@ -115,7 +121,12 @@ void Error_Handler(void);
 #define LED_BLUE_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define BLACK   0x0000
+#define WHITE   0xFFFF
+#define RED     0xF800
+#define GREEN   0x07E0
+#define BLUE    0x001F
+#define BGCOLOR WHITE
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
