@@ -7,6 +7,9 @@ volatile uint32_t step_count = 0;
 volatile uint32_t step_target = 0;
 volatile uint8_t stepper_done = 0;
 
+static Motor *active_motor = NULL;
+
+
 void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id)
 {
 	if (mmotor == NULL) return;
@@ -27,20 +30,19 @@ static void Mux_Select(uint8_t s2, uint8_t s1, uint8_t s0)
 void Motor_Select(const Motor *mmotor)
 {
 	if (mmotor == NULL) return;
-    switch (mmotor->ID){
-    	case MOTOR_1:
-    		Mux_Select(0,0,0);
-    		break;
-    	case MOTOR_2:
-    		Mux_Select(0,0,1);
-    		break;
-    	/*extend as i test more motors*/
-    	default:
-    		/*Error state*/
-    		break;
-    /*extend in theory as i add motors 2-5*/
+    switch (mmotor->ID)
+    {
+        case MOTOR_1: Mux_Select(0,0,0); break;
+        case MOTOR_2: Mux_Select(0,0,1); break;
+        case MOTOR_3: Mux_Select(0,1,0); break;
+        case MOTOR_4: Mux_Select(0,1,1); break;
+        case MOTOR_5: Mux_Select(1,0,0); break;
+        case MOTOR_6: Mux_Select(1,0,1); break;
+        default: break;
     }
+    /*extend in theory as i add motors 2-5*/
 }
+
 
 
 void Motor_SetDirection(const Motor *mmotor)
@@ -60,6 +62,7 @@ void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
     step_count = 0;
     step_target = steps;
     stepper_done = 0;
+    active_motor = mmotor;
     __HAL_TIM_SET_COUNTER(mmotor->clk, 0);
     __HAL_TIM_CLEAR_FLAG(mmotor->clk, TIM_FLAG_UPDATE);
 
@@ -77,9 +80,9 @@ void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
     /* stop the timer */
     HAL_TIM_PWM_Stop(mmotor->clk, TIM_CHANNEL_1);
     HAL_TIM_Base_Stop_IT(mmotor->clk);
+    active_motor = NULL;
 }
 
-// also realized that we need two more demuxes??//
 void Motor_RunMove(Motor *mmotor, uint32_t steps)
 {
 	if (mmotor == NULL || mmotor->clk == NULL || steps == 0U) return;
@@ -103,8 +106,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM4)
 	{
 	    step_count++;
-	    if (step_count >= step_target)
-	        stepper_done = 1;
+	    if (step_count >= step_target) stepper_done = 1;
 	}
 }
 

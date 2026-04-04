@@ -5,6 +5,14 @@
 #include <stdint.h>
 
 /*
+ * TODO: Set up a helper function for acceleration profile
+ *           - Will probably be similar to the lab dimming
+ *           - We have the clk info so just adjust ARR from observation
+ *           - Test code and iterate
+ * */
+
+
+/*
  * 	needs to be an extern to share to our ISR*/
 /*	Need to refactor this to standarize
  *	but for testing i need to lock in
@@ -16,7 +24,11 @@ extern volatile uint8_t stepper_done;	/*might be a useful flag for our program*/
 typedef enum
 {
     MOTOR_1 = 1,
-    MOTOR_2 = 2
+    MOTOR_2 = 2,
+	MOTOR_3 = 3,
+	MOTOR_4 = 4,
+	MOTOR_5 = 5,
+	MOTOR_6 = 6
 } MotorId;
 
 typedef enum
@@ -34,7 +46,8 @@ typedef struct
 	MotorId ID; /* what motor is it from 0-5 */
 	MotorDirection DIR; /* what direction motor goes*/
 
-	TIM_HandleTypeDef *clk;
+	TIM_HandleTypeDef *clk; /*Motor clk*/
+	/*Technically I should consider channels too*/
 	/*Should probably add the channel info too*/
 	/*
 	 * Moved these to a global bc we run one motor at a time
@@ -46,11 +59,15 @@ typedef struct
 } Motor;
 
 
-
+/*Initilize a motor object*/
 void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id);
+/*manage enable pins*/
 void Motor_Select(const Motor *mmotor);
+/*alterante directions as needed*/
 void Motor_SetDirection(const Motor *mmotor);
+/*meat of the code. Starts the pulse trains*/
 void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps);
+/*the main function for motor to configure the cube to move*/
 void Motor_RunMove(Motor *mmotor, uint32_t steps);
 
 #endif
