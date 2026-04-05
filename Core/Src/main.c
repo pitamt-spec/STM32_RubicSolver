@@ -157,10 +157,18 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Motor m1;
   Motor m2;
+  Motor m3;
+  Motor m4;
+  Motor m5;
+  Motor m6;
 
   Motor_Init(&htim4, &m1, MOTOR_1);
   Motor_Init(&htim4, &m2, MOTOR_2);
-  TestSuite_Init(&m1, &m2);
+  Motor_Init(&htim4, &m3, MOTOR_3);
+  Motor_Init(&htim4, &m4, MOTOR_4);
+  Motor_Init(&htim4, &m5, MOTOR_5);
+  Motor_Init(&htim4, &m6, MOTOR_6);
+  TestSuite_Init(&m1, &m2, &m3, &m4, &m5, &m6);
   //TODO remove button debug logic
   uint8_t button_was_pressed = 0;
   /* USER CODE END 2 */
@@ -216,7 +224,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-}
+
 
 /**
   * @brief System Clock Configuration
