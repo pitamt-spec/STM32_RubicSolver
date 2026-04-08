@@ -56,10 +56,30 @@ void Motor_SetDirection(const Motor *mmotor)
 	 * */
 	switch (mmotor->ID)
 	{
+	case MOTOR_1:
+		HAL_GPIO_WritePin(STPR_D1_GPIO_Port, STPR_D1_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
+	case MOTOR_2:
+		HAL_GPIO_WritePin(STPR_D2_GPIO_Port, STPR_D2_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
+	case MOTOR_3:
+		HAL_GPIO_WritePin(STPR_D3_GPIO_Port, STPR_D3_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
+	case MOTOR_4:
+		HAL_GPIO_WritePin(STPR_D4_GPIO_Port, STPR_D4_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
+	case MOTOR_5:
+		HAL_GPIO_WritePin(STPR_D5_GPIO_Port, STPR_D5_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	case MOTOR_6:
+		HAL_GPIO_WritePin(STPR_D6_GPIO_Port, STPR_D6_Pin,
+				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 	default: break;
 	}
-	HAL_GPIO_WritePin(STPR_D1_GPIO_Port, STPR_D1_Pin,
-						(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
 void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)

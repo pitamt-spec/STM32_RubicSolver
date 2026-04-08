@@ -1,8 +1,8 @@
 #include "test_suite.h"
 #include "motor.h"
 
-#define TEST_STEPS_90_DEG   	199
-#define TEST_STEPS_180_DEG   	399
+#define TEST_STEPS_90_DEG   	400
+#define TEST_STEPS_180_DEG   	799
 
 static Motor* motor1 = NULL;
 static Motor* motor2 = NULL;
@@ -167,7 +167,7 @@ void Basic_Solve(void)
 	{
 		motor1->DIR = MOTOR_DIR_CW;
 		Test_Motor(motor1, TEST_STEPS_180_DEG);
-		HAL_Delay(5);
+		HAL_Delay(500);
 		motor2->DIR = MOTOR_DIR_CW;
 		Test_Motor(motor2, TEST_STEPS_180_DEG);
 	}
@@ -180,15 +180,107 @@ void Basic_Solve(void)
 		motor1->DIR = MOTOR_DIR_CW;
 		Test_Motor(motor1, TEST_STEPS_90_DEG);
 		Test_Motor(motor1, TEST_STEPS_90_DEG);
-		HAL_Delay(5);
+		HAL_Delay(500);
 		motor2->DIR = MOTOR_DIR_CW;
 		Test_Motor(motor2, TEST_STEPS_90_DEG);
 		Test_Motor(motor2, TEST_STEPS_90_DEG);
 	}
 }
 
+void Turn_180_Test(void)
+{
+	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG);
+	Test_Motor(motor1, TEST_STEPS_90_DEG);
+	//HAL_Delay(50);
+	motor2->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG);
+	Test_Motor(motor2, TEST_STEPS_90_DEG);
+}
+
+void Turn_90_Test(void)
+{
+	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG);
+	HAL_Delay(100);
+	motor2->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG);
+}
+
+void Sexy_Test(void)
+{
+	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
+
+	motor1->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
+	motor2->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U*/
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
+	motor2->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
+}
+void Sledge_Test(void)
+{
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
+
+
+	motor3->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
+
+	motor1->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*F'*/
+}
+void T_Perm_Test(void)
+{
+	Sexy_Test();
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
+
+	motor3->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
+
+	motor1->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
+	motor1->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
+
+	motor2->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
+
+	motor2->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
+
+	motor2->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U*/
+
+	motor1->DIR = MOTOR_DIR_CW;
+	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
+
+	motor3->DIR = MOTOR_DIR_CCW;
+	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
+
+}
+
+
 void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
-	Basic_Solve();
+	T_Perm_Test();
+
+
 }
