@@ -2,7 +2,7 @@
 #include "motor.h"
 
 #define TEST_STEPS_90_DEG   	199
-#define TEST_STEPS_180_DEG   	180
+#define TEST_STEPS_180_DEG   	399
 
 static Motor* motor1 = NULL;
 static Motor* motor2 = NULL;
@@ -155,13 +155,40 @@ void TestSuite_RunOnce(void)
 	motor6->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor6, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
-
-
 }
 
 /*Can add more TestSuite stuff if you want */
+void Basic_Solve(void)
+{
+	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
+
+	// 180 degree turns
+	for (int i = 0; i < 5; ++i)
+	{
+		motor1->DIR = MOTOR_DIR_CW;
+		Test_Motor(motor1, TEST_STEPS_180_DEG);
+		HAL_Delay(5);
+		motor2->DIR = MOTOR_DIR_CW;
+		Test_Motor(motor2, TEST_STEPS_180_DEG);
+	}
+
+	HAL_Delay(1000); /*Doing this to know visually*/
+
+	// 90 degree turns
+	for (int i = 0; i < 5; ++i)
+	{
+		motor1->DIR = MOTOR_DIR_CW;
+		Test_Motor(motor1, TEST_STEPS_90_DEG);
+		Test_Motor(motor1, TEST_STEPS_90_DEG);
+		HAL_Delay(5);
+		motor2->DIR = MOTOR_DIR_CW;
+		Test_Motor(motor2, TEST_STEPS_90_DEG);
+		Test_Motor(motor2, TEST_STEPS_90_DEG);
+	}
+}
+
 void TestSuite_RunLoop(void)
 {
-    TestSuite_RunOnce();
+    //TestSuite_RunOnce();
+	Basic_Solve();
 }

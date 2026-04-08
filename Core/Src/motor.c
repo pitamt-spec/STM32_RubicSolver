@@ -7,7 +7,7 @@ volatile uint32_t step_count = 0;
 volatile uint32_t step_target = 0;
 volatile uint8_t stepper_done = 0;
 
-static Motor *active_motor = NULL;
+static Motor *active_motor = NULL; /*might be used for debug*/
 
 
 void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id)
@@ -50,6 +50,14 @@ void Motor_SetDirection(const Motor *mmotor)
 	if (mmotor == NULL) return;
 	// MELISSA CHANGED THIS
 	// it used to be HAL_GPIO_WritePin(STEPPER_DIR_PORT, STEPPER_DIR_PIN, .....
+	/*
+	 * Need to fix this to add direction
+	 * but highkey me too lazy to fix pins
+	 * */
+	switch (mmotor->ID)
+	{
+	default: break;
+	}
 	HAL_GPIO_WritePin(STPR_D1_GPIO_Port, STPR_D1_Pin,
 						(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }

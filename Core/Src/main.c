@@ -209,7 +209,7 @@ int main(void)
 
 			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
 				button_was_pressed = 1;
-				TestSuite_RunOnce();
+				TestSuite_RunLoop();
 			}
 		}
 		else if (button_now == GPIO_PIN_SET){
