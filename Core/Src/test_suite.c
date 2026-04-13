@@ -14,6 +14,10 @@ static Motor* motor6 = NULL;
 static void LED_Helper(uint8_t B, uint8_t R, uint8_t G);
 static void LED_On(const Motor *mmotor);
 static void Test_Motor(Motor *mmotor, uint32_t steps);
+static void Move_Helper(Motor *mmotor);
+
+static void TestSuite_RunOnce(void);
+static void Basic_Solve(void);
 
 
 //just make sure all the lights are off
@@ -106,7 +110,6 @@ void TestSuite_RunOnce(void)
 	motor1->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor1, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor1->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor1, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -115,7 +118,6 @@ void TestSuite_RunOnce(void)
 	motor2->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor2, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor2->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor2, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -124,7 +126,6 @@ void TestSuite_RunOnce(void)
 	motor3->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor3, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor3->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor3, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -133,7 +134,6 @@ void TestSuite_RunOnce(void)
 	motor4->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor4, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor4->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor4, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -142,7 +142,6 @@ void TestSuite_RunOnce(void)
 	motor5->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor5, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor5->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor5, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -151,7 +150,6 @@ void TestSuite_RunOnce(void)
 	motor6->DIR = MOTOR_DIR_CW;
 	Test_Motor(motor6, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
-
 	motor6->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor6, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
@@ -280,7 +278,8 @@ void T_Perm_Test(void)
 void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
+	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
 	T_Perm_Test();
-
+	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
 }

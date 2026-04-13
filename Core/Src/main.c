@@ -169,6 +169,8 @@ int main(void)
   Motor_Init(&htim4, &m5, MOTOR_5);
   Motor_Init(&htim4, &m6, MOTOR_6);
   TestSuite_Init(&m1, &m2, &m3, &m4, &m5, &m6);
+  HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
+
   //TODO remove button debug logic
   uint8_t button_was_pressed = 0;
   /* USER CODE END 2 */
