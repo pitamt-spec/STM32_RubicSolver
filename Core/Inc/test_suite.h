@@ -1,5 +1,5 @@
-#ifndef TESTSUITE_H
-#define TESTSUITE_H
+#ifndef TEST_SUITE_H
+#define TEST_SUITE_H
 
 #include "main.h"
 
@@ -7,7 +7,8 @@
 #include <stdint.h>
 
 void TestSuite_Init(Motor *mmotor1, Motor *mmotor2);
-void TestSuite_RunOnce(void);
+void Test_Motor_RunOnce(void);
+void Test_WS2812_RunOnce(void);
 void TestSuite_RunLoop(void);
 
 #endif
