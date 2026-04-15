@@ -214,11 +214,11 @@ void Sexy_Test(void)
 {
 	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
     Cube_Move(MOVE_R, MOVE_NORMAL);
-    HAL_Delay(1000);
+    HAL_Delay(500);
     Cube_Move(MOVE_U, MOVE_NORMAL);
-    HAL_Delay(1000);
+    HAL_Delay(500);
     Cube_Move(MOVE_R, MOVE_PRIME);
-    HAL_Delay(1000);
+    HAL_Delay(500);
     Cube_Move(MOVE_U, MOVE_PRIME);
 }
 
@@ -240,41 +240,26 @@ void Sledge_Test(void)
 void T_Perm_Test(void)
 {
 	Sexy_Test();
-
-	motor1->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
-
-	motor3->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
-
-	motor1->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
-	motor1->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
-
-	motor2->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
-
-	motor1->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
-
-	motor2->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
-
-	motor1->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
-
-	motor2->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U*/
-
-	motor1->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
-
-	motor3->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
-
+	HAL_Delay(500);
+	Cube_Move(MOVE_R, MOVE_PRIME);
+	HAL_Delay(500);
+	Cube_Move(MOVE_F, MOVE_NORMAL);
+	HAL_Delay(500);
+	Cube_Move(MOVE_R, MOVE_DOUBLE);
+	HAL_Delay(500);
+	Cube_Move(MOVE_U, MOVE_PRIME);
+	HAL_Delay(500);
+	Cube_Move(MOVE_R, MOVE_PRIME);
+	HAL_Delay(500);
+	Cube_Move(MOVE_U, MOVE_PRIME);
+	HAL_Delay(500);
 	Cube_Move(MOVE_R, MOVE_NORMAL);
-
+	HAL_Delay(500);
+	Cube_Move(MOVE_U, MOVE_NORMAL);
+	HAL_Delay(500);
+	Cube_Move(MOVE_R, MOVE_PRIME);
+	HAL_Delay(500);
+	Cube_Move(MOVE_F, MOVE_PRIME);
 }
 
 
@@ -282,7 +267,7 @@ void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
-	Sexy_Test();
+	T_Perm_Test();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
 }
