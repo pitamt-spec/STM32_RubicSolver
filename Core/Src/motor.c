@@ -75,9 +75,11 @@ void Motor_SetDirection(const Motor *mmotor)
 	case MOTOR_5:
 		HAL_GPIO_WritePin(STPR_D5_GPIO_Port, STPR_D5_Pin,
 				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
 	case MOTOR_6:
 		HAL_GPIO_WritePin(STPR_D6_GPIO_Port, STPR_D6_Pin,
 				(mmotor->DIR == MOTOR_DIR_CCW) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		break;
 	default: break;
 	}
 }

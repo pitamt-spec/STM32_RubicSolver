@@ -1,8 +1,9 @@
 #include "test_suite.h"
 #include "motor.h"
+#include "cube.h"
 
 #define TEST_STEPS_90_DEG   	400
-#define TEST_STEPS_180_DEG   	799
+#define TEST_STEPS_180_DEG   	800
 
 static Motor* motor1 = NULL;
 static Motor* motor2 = NULL;
@@ -30,6 +31,8 @@ void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmoto
 	motor4 = mmotor4;
 	motor5 = mmotor5;
 	motor6 = mmotor6;
+
+    Cube_Init(motor1, motor2, motor3, motor4, motor5, motor6);
 
 	LED_Helper(0,0,0);
 }
@@ -210,17 +213,15 @@ void Turn_90_Test(void)
 void Sexy_Test(void)
 {
 	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
-
-	motor1->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R*/
-	motor2->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U*/
-
-	motor1->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor1, TEST_STEPS_90_DEG); /*R'*/
-	motor2->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor2, TEST_STEPS_90_DEG); /*U'*/
+    Cube_Move(MOVE_R, MOVE_NORMAL);
+    HAL_Delay(1000);
+    Cube_Move(MOVE_U, MOVE_NORMAL);
+    HAL_Delay(1000);
+    Cube_Move(MOVE_R, MOVE_PRIME);
+    HAL_Delay(1000);
+    Cube_Move(MOVE_U, MOVE_PRIME);
 }
+
 void Sledge_Test(void)
 {
 	motor1->DIR = MOTOR_DIR_CW;
@@ -272,6 +273,8 @@ void T_Perm_Test(void)
 	motor3->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor3, TEST_STEPS_90_DEG); /*F*/
 
+	Cube_Move(MOVE_R, MOVE_NORMAL);
+
 }
 
 
@@ -279,7 +282,7 @@ void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
-	T_Perm_Test();
+	Sexy_Test();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
 }
