@@ -10,6 +10,9 @@
 extern TIM_HandleTypeDef htim3; 		/*tim channel we are using?*/
 extern volatile uint8_t datasentflag; 	/*flag being sent around*/
 
+
+
+
 /*initalize to off*/
 void WS2812_Init(void);
 /*send data packets*/
@@ -26,5 +29,7 @@ void Set_LED(int LEDnum, int Red, int Green, int Blue);
 void Set_Brightness(int brightness);
 void Party_LED(void);
 void Turn_LED_Off(void);
-
+void All_White(void);
+void Set_Ring(int ring, int r, int g, int b);
+void Load_Cube(void);
 #endif

@@ -202,6 +202,7 @@ void test_mode_touch(){
 			Displ_FillArea(10, 310, 280, 120, D_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, D_GREEN);
 			//TODO TODO ADD ALG CODE HERE
+			Load_Cube();
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 310, 280, 120, DD_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, DD_GREEN);

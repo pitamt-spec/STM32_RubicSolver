@@ -42,6 +42,26 @@ void Turn_LED_Off(void)
     WS2812_Send();
 }
 
+void Set_Ring(int ring, int r, int g, int b)
+{
+	for(int i = 0; i < 24; ++i)
+	{
+		Set_LED(24 * ring + i, r,g,b);
+	}
+
+}
+
+void Load_Cube(void)
+{
+	Set_Ring(0,255,0,0);
+	Set_Ring(1,0,0,255);
+	Set_Ring(2,255,255,255);
+	Set_Ring(3, 0,255,0);
+	Set_Ring(4,255,255,0);
+	Set_Ring(5,255,165,0);
+	Set_Brightness(20);
+	WS2812_Send();
+}
 /*
  * 0 < LEDnum <= MAX_LED
  * */
@@ -53,6 +73,17 @@ void Set_LED (int LEDnum, int Red, int Green, int Blue)
     LED_Data[LEDnum][2] = Red;
     LED_Data[LEDnum][3] = Blue;
 }
+
+void All_White(void)
+{
+	for(int i = 0; i < 6; ++i)
+	{
+		Set_Ring(i,255,255,255);
+	}
+	Set_Brightness(20);
+	WS2812_Send();
+}
+
 void Party_LED(void)
 {
 	/*Party colors*/
