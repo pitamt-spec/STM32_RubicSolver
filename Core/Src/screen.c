@@ -5,6 +5,8 @@
  *      Author: mjbarbat
  */
 #include "screen.h"
+#include "test_suite.h"
+
 
 // helper function for camera processing
 // used by solve_mode_touch() and step_by_step_touch()
@@ -178,6 +180,7 @@ void test_mode_touch(){
 			Displ_FillArea(10, 50, 280, 120, D_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, D_GREEN);
 			//TODO TODO ADD ALG CODE HERE
+			TestSuite_RunLoop();
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 50, 280, 120, DD_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, DD_GREEN);

@@ -14,6 +14,13 @@ uint16_t pwmData[(24 * MAX_LED) + 50];
 volatile uint8_t datasentflag = 0;
 extern TIM_HandleTypeDef htim3;
 
+#define NEO_0 22
+#define NEO_1 44
+
+//FPF
+//#define NEO_0 26
+//#define NEO_1 53
+
 /*Set everything up to zero*/
 void WS2812_Init(void)
 {
@@ -46,8 +53,8 @@ void Set_Brightness (int brightness)
 {
 #if USE_BRIGHTNESS
 
-    if (brightness > 45) brightness = 45;
-    if (brightness < 0) brightness = 0;
+    if (brightness > 44) brightness = 44;
+    if (brightness < 1) brightness = 1;
 
     for (int i = 0; i < MAX_LED; i++)
     {
@@ -91,15 +98,15 @@ void WS2812_Send(void)
 
         uint32_t color = (green << 16) | (red << 8) | blue; /*build color from green red blue*/
 
-        for (int i = 23; i >= 0; i--)
+        for (int bit = 23; bit >= 0; bit--)
         {
-            if (color & (1 << i))
+            if (color & (1 << bit))
             {
-                pwmData[indx] = 3;   /* HIGH longer → 1 */
+                pwmData[indx] = NEO_1;   /* HIGH longer → 1 */
             }
             else
             {
-                pwmData[indx] = 2;   /* HIGH shorter → 0 */
+                pwmData[indx] = NEO_0;   /* HIGH shorter → 0 */
             }
             indx++;
         }

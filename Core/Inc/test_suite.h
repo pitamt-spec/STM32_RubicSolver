@@ -2,8 +2,10 @@
 #define TESTSUITE_H
 
 #include "main.h"
-
 #include "motor.h"
+#include "cube.h"
+#include "NeoPixel.h"
+
 #include <stdint.h>
 
 
