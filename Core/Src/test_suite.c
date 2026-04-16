@@ -252,13 +252,38 @@ void Sexy_Test(void)
 	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
     Cube_Move(MOVE_R, MOVE_NORMAL);
     HAL_Delay(500);
-    Cube_Move(MOVE_U, MOVE_NORMAL);
+    Cube_Move(MOVE_D, MOVE_NORMAL);
     HAL_Delay(500);
     Cube_Move(MOVE_R, MOVE_PRIME);
     HAL_Delay(500);
-    Cube_Move(MOVE_U, MOVE_PRIME);
+    Cube_Move(MOVE_D, MOVE_PRIME);
 }
 
+void BullShit_Test(void){
+    motor1->DIR = MOTOR_DIR_CW;
+    Test_Motor(motor1, 444);
+    motor1->DIR = MOTOR_DIR_CCW;
+    Test_Motor(motor1, 44);
+    HAL_Delay(500);
+
+    motor2->DIR = MOTOR_DIR_CW;
+    Test_Motor(motor2, 444);
+    motor2->DIR = MOTOR_DIR_CCW;
+    Test_Motor(motor2, 44);
+    HAL_Delay(500);
+
+    motor1->DIR = MOTOR_DIR_CCW;
+    Test_Motor(motor1, 444);
+    motor1->DIR = MOTOR_DIR_CW;
+    Test_Motor(motor1, 44);
+    HAL_Delay(500);
+
+    motor2->DIR = MOTOR_DIR_CCW;
+    Test_Motor(motor2, 444);
+    motor2->DIR = MOTOR_DIR_CW;
+    Test_Motor(motor2, 44);
+
+}
 void Sledge_Test(void)
 {
 	motor1->DIR = MOTOR_DIR_CW;
@@ -304,7 +329,7 @@ void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
-	T_Perm_Test();
+	BullShit_Test();
 	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
 }
