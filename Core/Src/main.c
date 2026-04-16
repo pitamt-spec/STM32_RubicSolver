@@ -106,6 +106,7 @@ int main(void)
 
 	// ---- STEP-BY-STEP ----
 	void mode2() {
+		//Party_LED();
 	    if(prev_mode != 2) {
 			Displ_CLS(BLACK);	 //clear display
 			test_mode_display(); // TODO REMOVE TEST MODE

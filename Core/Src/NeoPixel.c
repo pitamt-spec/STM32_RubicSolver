@@ -7,6 +7,7 @@
 /*Data*/
 uint8_t LED_Data[MAX_LED][4];
 uint8_t LED_Mod[MAX_LED][4];
+int offset = 0;
 
 /* 24 bits per LED + reset pulse buffer*/
 uint16_t pwmData[(24 * MAX_LED) + 50];
@@ -31,6 +32,15 @@ void WS2812_Init(void)
     WS2812_Send();
 }
 
+void Turn_LED_Off(void)
+{
+    for (int i = 0; i < MAX_LED; i++)
+    {
+        Set_LED(i, 0, 0, 0);
+    }
+    Set_Brightness(20);
+    WS2812_Send();
+}
 
 /*
  * 0 < LEDnum <= MAX_LED
@@ -42,6 +52,53 @@ void Set_LED (int LEDnum, int Red, int Green, int Blue)
     LED_Data[LEDnum][1] = Green;
     LED_Data[LEDnum][2] = Red;
     LED_Data[LEDnum][3] = Blue;
+}
+void Party_LED(void)
+{
+	/*Party colors*/
+	uint8_t partyColors[24][3] = {
+	    {255,   0,   0},   // red
+	    {255,  64,   0},
+	    {255, 128,   0},
+	    {255, 191,   0},
+	    {255, 255,   0},   // yellow
+	    {191, 255,   0},
+	    {128, 255,   0},
+	    { 64, 255,   0},
+	    {  0, 255,   0},   // green
+	    {  0, 255,  64},
+	    {  0, 255, 128},
+	    {  0, 255, 191},
+	    {  0, 255, 255},   // cyan
+	    {  0, 191, 255},
+	    {  0, 128, 255},
+	    {  0,  64, 255},
+	    {  0,   0, 255},   // blue
+	    { 64,   0, 255},
+	    {128,   0, 255},
+	    {191,   0, 255},
+	    {255,   0, 255},   // magenta
+	    {255,   0, 191},
+	    {255,   0, 128},
+	    {255,   0,  64}
+	};
+
+    for(int fran = 0; fran < 6; ++fran)
+    {
+        for (int i = 0; i < 24; ++i)
+        {
+            int shifted = (i + offset) % 24;
+
+            Set_LED(fran * 24 + i,
+                    partyColors[shifted][0],
+                    partyColors[shifted][1],
+                    partyColors[shifted][2]);
+        }
+    }
+
+    Set_Brightness(20);
+    WS2812_Send();
+    offset = (offset + 1) % 24;
 }
 
 /*

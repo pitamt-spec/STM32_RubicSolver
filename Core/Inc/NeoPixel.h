@@ -24,6 +24,7 @@ void Set_LED(int LEDnum, int Red, int Green, int Blue);
  * Brightness values are being vary from 0 to 45
  * */
 void Set_Brightness(int brightness);
-
+void Party_LED(void);
+void Turn_LED_Off(void);
 
 #endif

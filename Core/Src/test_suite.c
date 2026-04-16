@@ -313,6 +313,6 @@ void TestSuite_RunLoop(void)
 //	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
 //	BullShit_Test();
 //	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
-	Test_WS2812_RunOnce();
+	Party_LED();
 
 }

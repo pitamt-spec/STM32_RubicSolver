@@ -191,6 +191,7 @@ void test_mode_touch(){
 			Displ_FillArea(10, 180, 280, 120, D_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, D_GREEN);
 			//TODO TODO ADD ALG CODE HERE
+			Turn_LED_Off();
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 180, 280, 120, DD_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, DD_GREEN);
