@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include "motor.h"
 #include "test_suite.h"
-#include "Neo_Pixel.h"
+#include "screen.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +50,7 @@ UART_HandleTypeDef huart2;
 
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
+DMA_HandleTypeDef hdma_spi2_tx;
 
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
@@ -78,7 +79,10 @@ static void MX_LPUART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t prev_mode = 0;
+uint8_t pretty_pattern_selected = 0;
+uint8_t solve_state = 0;
+uint8_t solve_mode = 5;
 /* USER CODE END 0 */
 
 /**
@@ -89,44 +93,51 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	// Solve
-	void mode1(void) {
-	    //printf("Mode 1\r\n");
-		// get steps to solve from pi
-		// display "easy, med, hard" on lcd
-		// use touchscreen to select motor speed
-		// show timer and # moves done/remaining on lcd
+	// ---- SOLVE MODE ----
+	void mode1() {
+	    if(prev_mode != 1) {
+			Displ_CLS(BLACK);	 //clear display
+			solve_state = 0;
+			solve_mode_display();
+		}
+	    // poll for touch
+	    solve_mode_touch();
 	}
 
-	// shuffle
-	void mode2(void) {
-	    //printf("Mode 2\r\n");
-		// display "start" on lcd
-		// use touchscreen to start shuffle
-		// randomly pick hardcoded shuffle algo
+	// ---- STEP-BY-STEP ----
+	void mode2() {
+	    if(prev_mode != 2) {
+			Displ_CLS(BLACK);	 //clear display
+			test_mode_display(); // TODO REMOVE TEST MODE
+		}
+
+	    // poll for touch
+	    test_mode_touch(); //TODO remove test mode
 	}
 
-	// step-by-step
-	void mode3(void) {
-	    //printf("Mode 3\r\n");
-		// get steps to solve from pi
-		// show "next" on lcd
-		// use touchscreen to progress to next move (maybe also prev move??)
-		// display moves remaining/ current move in rubiks notation on lcd
-	}
-
-	// pretty patterns
+	// ----PRETTY PATTERNS ----
 	// CUBE MUST BE SOLVED
-	void mode4(void) {
-	    //printf("Mode 4\r\n");
-		// show selection menu on lcd
-		// use touchscreen interface to select
-		// show fun animation related to pattern on display
-		// these are all hardcoded patterns
-
-		//MAYBE: show "restore" on lcd to return cube to solved state
-		// and then show pretty patterns menu again
+	void mode3() {
+		if(prev_mode !=3) {
+			Displ_CLS(BLACK);	 //clear display
+			//TODO add check for solved state??
+			pretty_pattern_selected = 0; //reset every time mode is changed
+			pattern_mode_display();
+		}
+		pattern_mode_touch();
 	}
+
+
+	// ---- MANUAL MODE ----
+	void mode4() {
+	    if(prev_mode != 4){
+			Displ_CLS(BLACK);	 //clear display
+			manual_display();
+	    }
+	    // poll for touch
+	    manual_mode_touch();
+	}
+
 
 
   /* USER CODE END 1 */
@@ -159,69 +170,43 @@ int main(void)
   MX_USART2_UART_Init();
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  Motor m1;
-  Motor m2;
-  Motor m3;
-  Motor m4;
-  Motor m5;
-  Motor m6;
-
-  Motor_Init(&htim4, &m1, MOTOR_1);
-  Motor_Init(&htim4, &m2, MOTOR_2);
-  Motor_Init(&htim4, &m3, MOTOR_3);
-  Motor_Init(&htim4, &m4, MOTOR_4);
-  Motor_Init(&htim4, &m5, MOTOR_5);
-  Motor_Init(&htim4, &m6, MOTOR_6);
-  TestSuite_Init(&m1, &m2, &m3, &m4, &m5, &m6);
-  HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
-
-  //TODO remove button debug logic
-  uint8_t button_was_pressed = 0;
-  int FUCKYOU = 0;
+  //LCD backlight initialization
+  Displ_Init(Displ_Orientat_180);			// initialize display controller
+  Displ_CLS(BLACK);							// clear the screen
+  Displ_BackLight('I');  					// initialize backlight
+  Displ_BackLight('1');						// light-up display at max light level
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uint32_t ADC_VAL = 0;
-	  HAL_ADC_Start(&hadc1);//start conversion
-	  HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);//wait for conversion to finish
-	  ADC_VAL = HAL_ADC_GetValue(&hadc1);//retrieve value
+		//mode code below !
+		uint32_t ADC_VAL = 0;
+		HAL_ADC_Start(&hadc1);//start conversion
+		HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);//wait for conversion to finish
+		ADC_VAL = HAL_ADC_GetValue(&hadc1);//retrieve value
 
-	  int mode = (ADC_VAL / 1024) + 1; // four modes (1-4)
-	  // TODO add delay to account for turning dial?
-	  switch(mode){
-	  case 1:
+		int mode = (ADC_VAL / 1024) + 1; // four modes (1-4)
+		// TODO add delay to account for turning dial
+		switch(mode){
+		case 1:
 		  mode1();
-	  	  break;
-	  case 2:
+		  prev_mode = 1;
+		  break;
+		case 2:
 		  mode2();
+		  prev_mode = 2;
 		  break;
-	  case 3:
+		case 3:
 		  mode3();
+		  prev_mode = 3;
 		  break;
-	  default: // else
+		default: // else
 		  mode4();
+		  prev_mode = 4;
 		  break;
-	  }
-
-	  // MOTOR CODE BELOW (this needs to move eventually)
-	  // TODO place motor code in correct spot and remove button debug
-		  GPIO_PinState button_now = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-		if (button_now == GPIO_PIN_RESET && button_was_pressed == 0){
-			HAL_Delay(20); // debounce
-
-			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
-				button_was_pressed = 1;
-				if(FUCKYOU == 1)TestSuite_RunLoop();
-				if(FUCKYOU == 0) FUCKYOU = 1;
-			}
 		}
-		else if (button_now == GPIO_PIN_SET){
-			button_was_pressed = 0;
-		}
-		HAL_Delay(10);
 
     /* USER CODE END WHILE */
 
@@ -589,7 +574,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 0;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 7999;
+  htim4.Init.Period = 3999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -640,8 +625,6 @@ static void MX_TIM15_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   /* USER CODE BEGIN TIM15_Init 1 */
 
@@ -662,42 +645,15 @@ static void MX_TIM15_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim15) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim15, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim15, &sBreakDeadTimeConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM15_Init 2 */
 
   /* USER CODE END TIM15_Init 2 */
-  HAL_TIM_MspPostInit(&htim15);
 
 }
 
@@ -715,6 +671,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* DMA1_Channel2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
 }
 
@@ -749,7 +708,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, DISPL_RST_Pin|TOUCH_CS_Pin|STPR_EN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, DISPL_DC_Pin|STPR_D6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, DISPL_DC_Pin|STPR_D6_Pin|DISPL_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, DEMUX_S0_Pin|DEMUX_S2_Pin|DEMUX_S1_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
@@ -784,9 +743,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DISPL_RST_Pin DISPL_DC_Pin TOUCH_CS_Pin STPR_EN_Pin
-                           STPR_D6_Pin */
+                           STPR_D6_Pin DISPL_LED_Pin */
   GPIO_InitStruct.Pin = DISPL_RST_Pin|DISPL_DC_Pin|TOUCH_CS_Pin|STPR_EN_Pin
-                          |STPR_D6_Pin;
+                          |STPR_D6_Pin|DISPL_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

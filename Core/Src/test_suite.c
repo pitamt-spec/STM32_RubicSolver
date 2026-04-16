@@ -1,10 +1,12 @@
 #include "test_suite.h"
+// FIXME i think the includes below can be moved to test_suite.h for cleaner code.
 #include "motor.h"
 #include "cube.h"
-#include "Neo_Pixel.h"
+#include "NeoPixel.h"
 
 #define TEST_STEPS_90_DEG   	400
 #define TEST_STEPS_180_DEG   	800
+
 
 static Motor* motor1 = NULL;
 static Motor* motor2 = NULL;
@@ -13,21 +15,24 @@ static Motor* motor4 = NULL;
 static Motor* motor5 = NULL;
 static Motor* motor6 = NULL;
 
+
 static void LED_Helper(uint8_t B, uint8_t R, uint8_t G);
 static void LED_On(const Motor *mmotor);
 static void Test_Motor(Motor *mmotor, uint32_t steps);
-static void Move_Helper(Motor *mmotor);
+static void Move_Helper(Motor *mmotor); //TODO implement
 
-static void TestSuite_RunOnce(void);
+static void TestSuite_RunOnce(void); //TODO implement
 static void Basic_Solve(void);
 
+void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmotor4, Motor *mmotor5, Motor *mmotor6);
+void TestSuite_RunLoop(void);
 
-//just make sure all the lights are off
+// just make sure all the lights are off
 void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmotor4, Motor *mmotor5, Motor *mmotor6)
 {
 	if (mmotor1 == NULL || mmotor2 == NULL || mmotor3 == NULL || mmotor4 == NULL || mmotor5 == NULL || mmotor6 == NULL) return;
 	motor1 = mmotor1;
-	motor2 = mmotor2;
+	motor2 = mmotor2;i don
 	motor3 = mmotor3;
 	motor4 = mmotor4;
 	motor5 = mmotor5;
@@ -147,7 +152,7 @@ void Test_Motor_RunOnce(void)
 
 /*
  *Setting diff colors to the LEDs
- *Increase the birghtness every 50 ms
+ *Increase the brightness every 50 ms
  *and decreasing brightness
  * */
 void Test_WS2812_RunOnce(void)

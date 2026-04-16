@@ -51,7 +51,10 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+extern uint8_t prev_mode; // stops screen from refreshing every time adc is polled
+extern uint8_t solve_state; // tracker for state of solve mode
+extern uint8_t solve_mode; // int representing solve mode (normal, fast, super fast, party)
+extern uint8_t pretty_pattern_selected; //BOOL for pretty pattern screen state machine
 /* USER CODE END EM */
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -87,8 +90,8 @@ void Error_Handler(void);
 #define STPR_EN_GPIO_Port GPIOF
 #define STPR_D6_Pin GPIO_PIN_8
 #define STPR_D6_GPIO_Port GPIOF
-#define DISP_LED_Pin GPIO_PIN_9
-#define DISP_LED_GPIO_Port GPIOF
+#define DISPL_LED_Pin GPIO_PIN_9
+#define DISPL_LED_GPIO_Port GPIOF
 #define DEMUX_S0_Pin GPIO_PIN_0
 #define DEMUX_S0_GPIO_Port GPIOC
 #define DEMUX_S2_Pin GPIO_PIN_1
@@ -126,7 +129,7 @@ void Error_Handler(void);
 #define RED     0xF800
 #define GREEN   0x07E0
 #define BLUE    0x001F
-#define BGCOLOR WHITE
+//#define BGCOLOR WHITE
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

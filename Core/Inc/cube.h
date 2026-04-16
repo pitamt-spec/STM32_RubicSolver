@@ -34,5 +34,4 @@ void Cube_Execute(const CubeMove *moves,
                   const MoveType *types,
                   uint32_t length);
 
-
 #endif

@@ -1,21 +1,24 @@
 #include "cube.h"
 
-#define STEPS_90   400
-#define STEPS_180  800
+#define STEPS_90   400 // TODO remove?
+#define STEPS_180  800 //TODO remove?
+
+#define STEPS_190	844
+#define STEPS_100	444
+#define STEPS_10	44
 
 static Motor *g_motors[MOVE_COUNT];
 
 static void Cube_ApplyMove(Motor *m, MoveType type);
 
-
-static void LED_Helper(uint8_t B, uint8_t R, uint8_t G)
+static void LED_Helper(uint8_t B, uint8_t R, uint8_t G) // TODO remove after debugging
 {
     HAL_GPIO_WritePin(LED_BLUE_GPIO_Port,  LED_BLUE_Pin,  B ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_RED_GPIO_Port,   LED_RED_Pin,   R ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, G ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-static void LED_FromMove(CubeMove move)
+static void LED_FromMove(CubeMove move) // TODO remove after debugging
 {
     switch (move)
     {
@@ -42,32 +45,34 @@ void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6)
 
 }
 
-/*TODO: MAke this shit turn 100 then back 10 for 90 degrees*/
+/* MELISSA: made cube move 100 then back 10 for 90 deg, and 190 and back 10 for 180 deg */
 static void Cube_ApplyMove(Motor *m, MoveType type)
 {
     if (!m) return;
-
-    uint32_t steps = STEPS_90;
 
     switch (type)
     {
     case MOVE_NORMAL:
         m->DIR = MOTOR_DIR_CCW;
-        steps = STEPS_90;
+        Motor_RunMove(m, STEPS_100);
+        m->DIR = MOTOR_DIR_CW;
+        Motor_RunMove(m, STEPS_10);
         break;
 
     case MOVE_PRIME:
         m->DIR = MOTOR_DIR_CW;
-        steps = STEPS_90;
+        Motor_RunMove(m, STEPS_100);
+		m->DIR = MOTOR_DIR_CCW;
+		Motor_RunMove(m, STEPS_10);
         break;
 
     case MOVE_DOUBLE:
         m->DIR = MOTOR_DIR_CW;
-        steps = STEPS_180;
+        Motor_RunMove(m, STEPS_190);
+        m->DIR = MOTOR_DIR_CCW;
+        Motor_RunMove(m, STEPS_10);
         break;
     }
-
-    Motor_RunMove(m, steps);
 }
 
 void Cube_Move(CubeMove move, MoveType type)
@@ -88,6 +93,6 @@ void Cube_Execute(const CubeMove *moves,
     for (uint32_t i = 0; i < length; i++)
     {
         Cube_Move(moves[i], types[i]);
-//        HAL_Delay(100); // optional spacing
+//        HAL_Delay(100); // optional spacing -> MELISSA: we should not use HAL_Delay bc it blocks the mcu from doing anything else
     }
 }
