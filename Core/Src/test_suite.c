@@ -1,6 +1,7 @@
 #include "test_suite.h"
 #include "motor.h"
 #include "cube.h"
+#include "Neo_Pixel.h"
 
 #define TEST_STEPS_90_DEG   	400
 #define TEST_STEPS_180_DEG   	800
@@ -34,7 +35,8 @@ void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmoto
 
     Cube_Init(motor1, motor2, motor3, motor4, motor5, motor6);
 
-	LED_Helper(0,0,0);
+	LED_Helper(0,0,0); /* Don't mix up LED and the WS2812 please*/
+	WS2812_Init(); /* Clear the ring*/
 }
 
 static void LED_Helper(uint8_t B, uint8_t R, uint8_t G)
@@ -105,7 +107,7 @@ static void Test_Motor(Motor* mmotor, uint32_t steps)
 	LED_Helper(0,0,0);
 }
 
-void TestSuite_RunOnce(void)
+void Test_Motor_RunOnce(void)
 {
 	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
 
@@ -140,6 +142,41 @@ void TestSuite_RunOnce(void)
 	motor4->DIR = MOTOR_DIR_CCW;
 	Test_Motor(motor4, TEST_STEPS_90_DEG);
 	HAL_Delay(500);
+	HAL_Delay(1000);
+}
+
+/*
+ *Setting diff colors to the LEDs
+ *Increase the birghtness every 50 ms
+ *and decreasing brightness
+ * */
+void Test_WS2812_RunOnce(void)
+{
+	Set_LED(0, 255, 0, 0);
+	Set_LED(1, 0, 255, 0);
+	Set_LED(2, 0, 0, 255);
+
+	Set_LED(3, 46, 89, 128);
+
+	Set_LED(4, 156, 233, 100);
+	Set_LED(5, 102, 0, 235);
+	Set_LED(6, 47, 38, 77);
+
+	Set_LED(7, 255, 200, 0);
+
+	for (int i=0; i<46;i++)
+	{
+		Set_Brightness(i);
+		WS2812_Send();
+		HAL_Delay(50);
+	}
+
+	for (int i=45;i>=0; i--)
+	{
+		Set_Brightness(i);
+		WS2812_Send();
+		HAL_Delay(50);
+	}
 
 	/*Start motor 5*/
 	motor5->DIR = MOTOR_DIR_CW;

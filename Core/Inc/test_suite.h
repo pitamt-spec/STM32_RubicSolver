@@ -1,5 +1,5 @@
-#ifndef TESTSUITE_H
-#define TESTSUITE_H
+#ifndef TEST_SUITE_H
+#define TEST_SUITE_H
 
 #include "main.h"
 

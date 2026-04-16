@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "motor.h"
 #include "test_suite.h"
+#include "Neo_Pixel.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
