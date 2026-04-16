@@ -53,12 +53,12 @@ void Set_Ring(int ring, int r, int g, int b)
 
 void Load_Cube(void)
 {
-	Set_Ring(0,255,0,0);
-	Set_Ring(1,0,0,255);
-	Set_Ring(2,255,255,255);
-	Set_Ring(3, 0,255,0);
-	Set_Ring(4,255,255,0);
-	Set_Ring(5,255,165,0);
+	Set_Ring(0,255,50,0); // O
+	Set_Ring(1,0,255,0); // G
+	Set_Ring(2,255,0,0); // R
+	Set_Ring(3, 255,255,255); // W
+	Set_Ring(4,0,0,255);
+	Set_Ring(5,255,130, 0); // B - > Yellow
 	Set_Brightness(20);
 	WS2812_Send();
 }
