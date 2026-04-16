@@ -9,10 +9,13 @@ uint8_t LED_Data[MAX_LED][4];
 uint8_t LED_Mod[MAX_LED][4];
 
 /* 24 bits per LED + reset pulse buffer*/
-uint16_t pwmData[(24 * MAX_LED) + 50];
+uint32_t pwmData[(24 * MAX_LED) + 50];
 
 volatile uint8_t datasentflag = 0;
 extern TIM_HandleTypeDef htim3;
+
+#define NEO_0 26
+#define NEO_1 51
 
 /*Set everything up to zero*/
 void WS2812_Init(void)
@@ -46,8 +49,8 @@ void Set_Brightness (int brightness)
 {
 #if USE_BRIGHTNESS
 
-    if (brightness > 45) brightness = 45;
-    if (brightness < 0) brightness = 0;
+    if (brightness > 44) brightness = 44;
+    if (brightness < 1) brightness = 1;
 
     for (int i = 0; i < MAX_LED; i++)
     {
@@ -91,15 +94,15 @@ void WS2812_Send(void)
 
         uint32_t color = (green << 16) | (red << 8) | blue; /*build color from green red blue*/
 
-        for (int i = 23; i >= 0; i--)
+        for (int bit = 23; bit >= 0; bit--)
         {
-            if (color & (1 << i))
+            if (color & (1 << bit))
             {
-                pwmData[indx] = 3;   /* HIGH longer → 1 */
+                pwmData[indx] = NEO_1;   /* HIGH longer → 1 */
             }
             else
             {
-                pwmData[indx] = 2;   /* HIGH shorter → 0 */
+                pwmData[indx] = NEO_0;   /* HIGH shorter → 0 */
             }
             indx++;
         }
@@ -115,7 +118,7 @@ void WS2812_Send(void)
     }
 
     // start DMA
-    HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_3, (uint32_t *)pwmData, indx);
+    HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_3, pwmData, indx);
     while(!datasentflag){};
     datasentflag = 0;
 }
