@@ -42,6 +42,7 @@ void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6)
 
 }
 
+/*TODO: MAke this shit turn 100 then back 10 for 90 degrees*/
 static void Cube_ApplyMove(Motor *m, MoveType type)
 {
     if (!m) return;
