@@ -120,6 +120,7 @@ void Motor_RunMove(Motor *mmotor, uint32_t steps)
     //Motor_DisableAll();
     Motor_Select(mmotor);
     Motor_SetDirection(mmotor);
+    HAL_Delay(1);
     /*
      * Assume we are not going to mux dir and en
      * Propose to just have the singal sent to all motors at all times

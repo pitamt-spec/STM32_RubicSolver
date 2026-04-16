@@ -248,11 +248,11 @@ void Sexy_Test(void)
 {
 	if (motor1 == NULL || motor2 == NULL || motor3 == NULL || motor4 == NULL || motor5 == NULL || motor6 == NULL) return;
     Cube_Move(MOVE_R, MOVE_NORMAL);
-    HAL_Delay(500);
+    HAL_Delay(1000);
     Cube_Move(MOVE_U, MOVE_NORMAL);
-    HAL_Delay(500);
+    HAL_Delay(1000);
     Cube_Move(MOVE_R, MOVE_PRIME);
-    HAL_Delay(500);
+    HAL_Delay(1000);
     Cube_Move(MOVE_U, MOVE_PRIME);
 }
 
@@ -300,10 +300,10 @@ void T_Perm_Test(void)
 void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
-//	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
-//	T_Perm_Test();
-//	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
+	Sexy_Test();
+	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
-	Test_WS2812_RunOnce();
+
 
 }

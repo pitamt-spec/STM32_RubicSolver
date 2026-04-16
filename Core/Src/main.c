@@ -173,10 +173,11 @@ int main(void)
   Motor_Init(&htim4, &m5, MOTOR_5);
   Motor_Init(&htim4, &m6, MOTOR_6);
   TestSuite_Init(&m1, &m2, &m3, &m4, &m5, &m6);
-  HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 
   //TODO remove button debug logic
   uint8_t button_was_pressed = 0;
+  int FUCKYOU = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -213,7 +214,8 @@ int main(void)
 
 			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
 				button_was_pressed = 1;
-				TestSuite_RunLoop();
+				if(FUCKYOU == 1)TestSuite_RunLoop();
+				if(FUCKYOU == 0) FUCKYOU = 1;
 			}
 		}
 		else if (button_now == GPIO_PIN_SET){
@@ -590,9 +592,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 15;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 3999;
+  htim4.Init.Period = 7999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)

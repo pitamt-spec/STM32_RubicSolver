@@ -4,7 +4,7 @@
 #include "main.h"
 #include <stdint.h>
 
-#define MAX_LED 48
+#define MAX_LED 72
 #define USE_BRIGHTNESS 1
 
 extern TIM_HandleTypeDef htim3; 		/*tim channel we are using?*/
