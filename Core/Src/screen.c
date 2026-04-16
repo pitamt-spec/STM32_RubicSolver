@@ -6,6 +6,7 @@
  */
 #include "screen.h"
 #include "test_suite.h"
+#include "cube.h"
 
 
 // helper function for camera processing
@@ -470,6 +471,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 50, 140, 60, MAGENTA);
 			Displ_WString(70, 70, "F", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_F, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 50, 140, 60, D_MAGENTA);
 			Displ_WString(70, 70, "F", Font20, 1, WHITE, D_MAGENTA);
@@ -480,6 +482,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 50, 140, 60, MAGENTA);
 			Displ_WString(220, 70, "F'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_F, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 50, 140, 60, D_MAGENTA);
 			Displ_WString(220, 70, "F'", Font20, 1, WHITE, D_MAGENTA);
@@ -490,6 +493,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 120, 140, 60, MAGENTA);
 			Displ_WString(70, 140, "R", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_R, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 120, 140, 60, D_MAGENTA);
 			Displ_WString(70, 140, "R", Font20, 1, WHITE, D_MAGENTA);
@@ -500,6 +504,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 120, 140, 60, MAGENTA);       // X=160, Y=120, Width=140, Height=60
 			Displ_WString(220, 140, "R'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_R, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 120, 140, 60, D_MAGENTA);
 			Displ_WString(220, 140, "R'", Font20, 1, WHITE, D_MAGENTA);
@@ -510,6 +515,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 190, 140, 60, MAGENTA);
 			Displ_WString(70, 210, "U", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_U, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 190, 140, 60, D_MAGENTA);
 			Displ_WString(70, 210, "U", Font20, 1, WHITE, D_MAGENTA);
@@ -520,6 +526,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 190, 140, 60, MAGENTA);
 			Displ_WString(220, 210, "U'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_U, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 190, 140, 60, D_MAGENTA);
 			Displ_WString(220, 210, "U'", Font20, 1, WHITE, D_MAGENTA);
@@ -530,6 +537,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 260, 140, 60, MAGENTA);
 			Displ_WString(70, 280, "B", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_B, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 260, 140, 60, D_MAGENTA);
 			Displ_WString(70, 280, "B", Font20, 1, WHITE, D_MAGENTA);
@@ -540,6 +548,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 260, 140, 60, MAGENTA);
 			Displ_WString(220, 280, "B'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_B, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 260, 140, 60, D_MAGENTA);
 			Displ_WString(220, 280, "B'", Font20, 1, WHITE, D_MAGENTA);
@@ -550,6 +559,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 330, 140, 60, MAGENTA);
 			Displ_WString(70, 350, "L", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_L, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 330, 140, 60, D_MAGENTA);
 			Displ_WString(70, 350, "L", Font20, 1, WHITE, D_MAGENTA);
@@ -560,6 +570,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 330, 140, 60, MAGENTA);
 			Displ_WString(220, 350, "L'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_L, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 330, 140, 60, D_MAGENTA);
 			Displ_WString(220, 350, "L'", Font20, 1, WHITE, D_MAGENTA);
@@ -570,6 +581,7 @@ void manual_mode_touch(){
 			Displ_FillArea(10, 400, 140, 60, MAGENTA);
 			Displ_WString(70, 420, "D", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_D, MOVE_NORMAL);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 400, 140, 60, D_MAGENTA);
 			Displ_WString(70, 420, "D", Font20, 1, WHITE, D_MAGENTA);
@@ -580,6 +592,7 @@ void manual_mode_touch(){
 			Displ_FillArea(160, 400, 140, 60, MAGENTA);
 			Displ_WString(220, 420, "D'", Font20, 1, WHITE, MAGENTA);
 			//TODO TODO ADD MOTOR CODE HERE
+			Cube_Move(MOVE_D, MOVE_PRIME);
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(160, 400, 140, 60, D_MAGENTA);
 			Displ_WString(220, 420, "D'", Font20, 1, WHITE, D_MAGENTA);

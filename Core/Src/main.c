@@ -149,7 +149,20 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  Motor m1;
+  Motor m2;
+  Motor m3;
+  Motor m4;
+  Motor m5;
+  Motor m6;
+  Motor_Init(&htim4, &m1, MOTOR_1);
+  Motor_Init(&htim4, &m2, MOTOR_2);
+  Motor_Init(&htim4, &m3, MOTOR_3);
+  Motor_Init(&htim4, &m4, MOTOR_4);
+  Motor_Init(&htim4, &m5, MOTOR_5);
+  Motor_Init(&htim4, &m6, MOTOR_6);
 
+  Cube_Init(&m1, &m2, &m3, &m4, &m5, &m6);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -578,7 +591,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 15;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 7999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

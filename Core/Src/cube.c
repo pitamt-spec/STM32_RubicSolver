@@ -49,7 +49,7 @@ void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6)
 static void Cube_ApplyMove(Motor *m, MoveType type)
 {
     if (!m) return;
-
+    HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
     switch (type)
     {
     case MOVE_NORMAL:
@@ -73,6 +73,7 @@ static void Cube_ApplyMove(Motor *m, MoveType type)
         Motor_RunMove(m, STEPS_10);
         break;
     }
+    HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 }
 
 void Cube_Move(CubeMove move, MoveType type)
