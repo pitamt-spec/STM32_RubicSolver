@@ -43,7 +43,6 @@ void Flower_Pattern(void);
 void Dot_Pattern(void);
 void Bird_Pattern(void);
 void Fish_Pattern(void);
-void Fish_Pattern(void);
 void Cross_Pattern(void);
 void Chess_Pattern(void);
 

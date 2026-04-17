@@ -232,10 +232,6 @@ void Fish_Pattern(void){
 	Cube_Execute_String(pattern);
 }
 
-void Fish_Pattern(void){
-	const char *pattern = "fULDFRlUFFUUBBDDBdrB";
-	Cube_Execute_String(pattern);
-}
 
 void Cross_Pattern(void){
 	const char *pattern = "DRRLLuDLLFFUUDDFFRRu";
