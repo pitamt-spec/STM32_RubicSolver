@@ -395,7 +395,7 @@ void pattern_mode_touch(){
 			// idea for implementing reset:
 			// store last pattern as global var (enum). have function for each pattern.
 			//call function here based on last_pattern values
-
+			Cube_Execute_Reverse(); /*Might work might not work; Fuck around and find out*/
 			//reset screen
 			default_pattern_buttons();
 			Displ_FillArea(10, 440, 290, 30, BLACK);

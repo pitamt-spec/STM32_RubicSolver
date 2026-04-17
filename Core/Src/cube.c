@@ -103,6 +103,20 @@ void Cube_Execute(void)
     }
 }
 
+void Cube_Execute_Reverse(void)
+{
+    for (int i = g_move_count - 1; i >= 0; i--)
+    {
+        MoveType inv;
+
+        if (types[i] == MOVE_NORMAL) inv = MOVE_PRIME;
+        else if (types[i] == MOVE_PRIME) inv = MOVE_NORMAL;
+        else inv = MOVE_DOUBLE;
+
+        Cube_Move(moves[i], inv);
+    }
+}
+
 void String_To_Moves(const char *str)
 {
     uint32_t idx = 0;   // index into moves/types
