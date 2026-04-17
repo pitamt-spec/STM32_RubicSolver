@@ -38,5 +38,13 @@ void String_To_Moves(const char *str);
 // Public API to do move sequence
 void Cube_Execute_String(const char *str);
 
+//Pattern rapid fire
+void Flower_Pattern(void);
+void Dot_Pattern(void);
+void Bird_Pattern(void);
+void Fish_Pattern(void);
+void Fish_Pattern(void);
+void Cross_Pattern(void);
+void Chess_Pattern(void);
 
 #endif

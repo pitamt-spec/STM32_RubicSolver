@@ -274,7 +274,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// R B U2 L' B R L' F' B L B D2 L' F' U2 D2
-
+			Flower_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
@@ -295,7 +295,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// U R L' F B' U D' L'
-
+			Dot_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
@@ -316,7 +316,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// U F2 R2 U2 L2 U B2 U2 L2 D L2 F2 U2 R2 B2
-
+			Bird_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
@@ -337,7 +337,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// F' U L D F R L' U F2 U2B2 D2 B D' R' B
-
+			Fish_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
@@ -358,7 +358,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// D R2 L2 U' D L2 F2 U2 D2 F2 R2 U'
-
+			Cross_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
@@ -379,7 +379,7 @@ void pattern_mode_touch(){
 
 			// TODO TODO ALGORITHM CODE GOES HERE
 			// R L' F2 B2 U2 D2 R L'
-
+			Chess_Pattern();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);

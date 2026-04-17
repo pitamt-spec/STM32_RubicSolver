@@ -191,4 +191,38 @@ void Cube_Execute_String(const char *str)
     Cube_Execute();
 }
 
+void Flower_Pattern(void)
+{
+	const char *pattern = "RBUUlBRlfBLBDDlfUUDD";
+	Cube_Execute_String(pattern);
+}
+void Dot_Pattern(void){
+	const char *pattern = "URlFbUdl";
+	Cube_Execute_String(pattern);
+}
+
+void Bird_Pattern(void){
+	 const char *pattern = "UFFRRUULLUBBUULLDLLFFUURRBB";
+	 Cube_Execute_String(pattern);
+}
+
+void Fish_Pattern(void){
+	const char *pattern = "fULDFRlUFFUUBBDDBdrB";
+	Cube_Execute_String(pattern);
+}
+
+void Fish_Pattern(void){
+	const char *pattern = "fULDFRlUFFUUBBDDBdrB";
+	Cube_Execute_String(pattern);
+}
+
+void Cross_Pattern(void){
+	const char *pattern = "DRRLLuDLLFFUUDDFFRRu";
+	Cube_Execute_String(pattern);
+}
+
+void Chess_Pattern(void){
+	const char *pattern = "RlFFBBUUDDRl";
+	Cube_Execute_String(pattern);
+}
 
