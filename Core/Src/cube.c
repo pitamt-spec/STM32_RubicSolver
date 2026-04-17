@@ -6,8 +6,15 @@
 #define STEPS_190	844
 #define STEPS_100	444
 #define STEPS_10	44
+#define MAX_CUBE_MOVES 64 // Prevent garbage bs
+
 
 static Motor *g_motors[MOVE_COUNT];
+
+//TODO: I highkey dont know what the size should be
+static CubeMove moves[MAX_CUBE_MOVES];
+static MoveType types[MAX_CUBE_MOVES];
+static uint32_t g_move_count = 0;
 
 static void Cube_ApplyMove(Motor *m, MoveType type);
 
@@ -87,13 +94,101 @@ void Cube_Move(CubeMove move, MoveType type)
     LED_Helper(0,0,0);
 }
 
-void Cube_Execute(const CubeMove *moves,
-                  const MoveType *types,
-                  uint32_t length)
+void Cube_Execute(void)
 {
-    for (uint32_t i = 0; i < length; i++)
+	if (g_move_count == 0) return; // this should be bad i think
+    for (uint32_t i = 0; i <  g_move_count; i++)
     {
         Cube_Move(moves[i], types[i]);
-//        HAL_Delay(100); // optional spacing -> MELISSA: we should not use HAL_Delay bc it blocks the mcu from doing anything else
     }
 }
+
+void String_To_Moves(const char *str)
+{
+    uint32_t idx = 0;   // index into moves/types
+    uint32_t i = 0;     // index into string
+    g_move_count = 0; 	// reset this piece of shit
+
+    while (str[i] != '\0' && idx < MAX_CUBE_MOVES)
+    {
+        CubeMove move;
+        MoveType type = MOVE_NORMAL;
+
+        // 1. Parse move
+        switch (str[i])
+        {
+            case 'R':
+            	move = MOVE_R;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'U':
+            	move = MOVE_U;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'F':
+            	move = MOVE_F;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'L':
+            	move = MOVE_L;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'D':
+            	move = MOVE_D;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'B':
+            	move = MOVE_B;
+            	type = MOVE_NORMAL;
+            	break;
+
+            case 'r':
+            	move = MOVE_R;
+            	type = MOVE_PRIME;
+            	break;
+            case 'u':
+            	move = MOVE_U;
+            	type = MOVE_PRIME;
+            break;
+            case 'f':
+            	move = MOVE_F;
+            	type = MOVE_PRIME;
+            	break;
+            case 'l':
+            	move = MOVE_L;
+            	type = MOVE_PRIME;
+            	break;
+            case 'd':
+            	move = MOVE_D;
+            	type = MOVE_PRIME;
+            	break;
+            case 'b':
+            	move = MOVE_B;
+            	type = MOVE_PRIME;
+            	break;
+
+            default:
+            	// TODO: If we get here didn't we fuck up the string???
+                i++;
+                printf("WE FUCKED UP");
+                continue;
+        }
+
+
+        // Store
+        moves[idx] = move;
+        types[idx] = type;
+        idx++;
+        i++;
+    }
+    g_move_count = idx;
+}
+
+
+void Cube_Execute_String(const char *str)
+{
+    String_To_Moves(str);
+    Cube_Execute();
+}
+
+
