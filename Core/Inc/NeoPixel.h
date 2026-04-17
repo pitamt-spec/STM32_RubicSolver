@@ -11,7 +11,15 @@ extern TIM_HandleTypeDef htim3; 		/*tim channel we are using?*/
 extern volatile uint8_t datasentflag; 	/*flag being sent around*/
 
 
-
+typedef enum
+{
+	LED_1 = 0,
+	LED_2 = 1,
+	LED_3 = 2,
+	LED_4 = 3,
+	LED_5 = 4,
+	LED_6 = 5,
+} LED_num;
 
 /*initalize to off*/
 void WS2812_Init(void);

@@ -76,12 +76,25 @@ void Set_All_Next_Color(void)
 
 void Load_Cube(void)
 {
-	Set_Ring(0,255,50,0); // O
-	Set_Ring(1,0,255,0); // G
-	Set_Ring(2,255,0,0); // R
-	Set_Ring(3, 255,255,255); // W
-	Set_Ring(4,0,0,255);
-	Set_Ring(5,255,130, 0); // B - > Yellow
+	/*
+	 * Mapping Key for my sanity
+	 * LED_0 = Green. m1
+	 * LED_1 = White. m3
+	 * LED_2 = Red.   m6
+	 * LED_3 = Blue.  m4
+	 * LED_4 = Yellow m5
+	 * LED_5 = Orange m2
+	 * */
+
+
+	Set_Ring(LED_1,0,255,0); // G
+	Set_Ring(LED_2,255,255,255); // W
+	Set_Ring(LED_3,255,0,0); // R
+	Set_Ring(LED_4, 0,0,255); // B
+	Set_Ring(LED_5,255,130, 0); // Yellow
+	Set_Ring(LED_6,255,50,0); // Orange
+
+
 	Set_Brightness(20);
 	WS2812_Send();
 }
