@@ -43,12 +43,19 @@ static void LED_FromMove(CubeMove move) // TODO remove after debugging
 void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6){
 	if (!m1 || !m2 || !m3 || !m4 || !m5 || !m6) return;
 
-	g_motors[MOVE_R] = m1;
-    g_motors[MOVE_U] = m2;
-    g_motors[MOVE_F] = m3;
-    g_motors[MOVE_L] = m4;
-    g_motors[MOVE_D] = m5;
-    g_motors[MOVE_B] = m6;
+//	g_motors[MOVE_R] = m1;
+//    g_motors[MOVE_U] = m2;
+//    g_motors[MOVE_F] = m3;
+//    g_motors[MOVE_L] = m4;
+//    g_motors[MOVE_D] = m5;
+//    g_motors[MOVE_B] = m6;
+
+    g_motors[MOVE_F] = m1;
+    g_motors[MOVE_L] = m2;
+    g_motors[MOVE_U] = m3;
+    g_motors[MOVE_B] = m4;
+    g_motors[MOVE_D] = m6;
+    g_motors[MOVE_R] = m6;
 
 }
 
