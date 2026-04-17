@@ -214,7 +214,7 @@ void Cube_Execute_String(const char *str)
 
 void Flower_Pattern(void)
 {
-	const char *pattern = "RBUUlBRlfBLBDDlfUUDD";
+	const char *pattern = "RBUUlbRlfBLBDDlfUUDD";
 	Cube_Execute_String(pattern);
 }
 void Dot_Pattern(void){
