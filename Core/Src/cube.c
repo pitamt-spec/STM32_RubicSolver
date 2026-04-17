@@ -54,7 +54,7 @@ void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6)
     g_motors[MOVE_L] = m2;
     g_motors[MOVE_U] = m3;
     g_motors[MOVE_B] = m4;
-    g_motors[MOVE_D] = m6;
+    g_motors[MOVE_D] = m5;
     g_motors[MOVE_R] = m6;
 
 }
@@ -239,7 +239,7 @@ void Cross_Pattern(void){
 }
 
 void Chess_Pattern(void){
-	const char *pattern = "RlFFBBUUDDRl";
+	const char *pattern = "RRllFFBBUUDD";
 	Cube_Execute_String(pattern);
 }
 
