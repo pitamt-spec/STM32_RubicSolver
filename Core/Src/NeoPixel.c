@@ -50,6 +50,29 @@ void Set_Ring(int ring, int r, int g, int b)
 	}
 
 }
+void Set_All_Next_Color(void)
+{
+    static uint8_t mode = 0;
+
+    uint8_t colors[6][3] = {
+        {120, 120, 120},   // Neutral white
+        {160,  80,  80},   // Red-heavy
+        { 80,  80, 160},   // Blue-heavy
+        { 80, 160,  80},
+		{ 255, 200,  150},
+		{ 255, 200,  150},
+    };
+
+    for (int i = 0; i < 6; ++i)
+    {
+        Set_Ring(i, colors[mode][0], colors[mode][1], colors[mode][2]);
+    }
+
+    Set_Brightness(1);
+    WS2812_Send();
+
+    mode = (mode + 1) % 6;
+}
 
 void Load_Cube(void)
 {
@@ -80,7 +103,7 @@ void All_White(void)
 	{
 		Set_Ring(i,255,255,255);
 	}
-	Set_Brightness(20);
+	Set_Brightness(1);
 	WS2812_Send();
 }
 

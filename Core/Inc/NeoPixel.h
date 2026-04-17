@@ -32,4 +32,5 @@ void Turn_LED_Off(void);
 void All_White(void);
 void Set_Ring(int ring, int r, int g, int b);
 void Load_Cube(void);
+void Set_All_Next_Color(void);
 #endif
