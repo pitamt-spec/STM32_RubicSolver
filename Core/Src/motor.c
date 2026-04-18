@@ -108,6 +108,7 @@ void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
     active_motor = NULL;
 }
 
+// QUESTION what is the difference between this and run move?
 void Motor_RunMove(Motor *mmotor, uint32_t steps)
 {
 	if (mmotor == NULL || mmotor->clk == NULL || steps == 0U) return;
