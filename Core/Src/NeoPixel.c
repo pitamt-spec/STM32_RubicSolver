@@ -23,6 +23,8 @@ extern TIM_HandleTypeDef htim3;
 //#define NEO_1 53
 
 /*Set everything up to zero*/
+
+/*HERE I STAND STRONG*/
 void WS2812_Init(void)
 {
     for (int i = 0; i < MAX_LED; i++)
