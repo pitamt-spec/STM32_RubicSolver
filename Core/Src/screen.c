@@ -6,10 +6,6 @@
  */
 #include "screen.h"
 
-
-
-
-
 // helper function for camera processing
 // used by solve_mode_touch() and step_by_step_touch()
 void camera_processing_helper(){
@@ -22,24 +18,22 @@ void camera_processing_helper(){
 	Displ_WString(45, 420, "Scanning Cube", Font24, 1, WHITE, DDD_WHITE);
 
 	All_White();
+	memset(rx_kociemba, 0, 64);
     HAL_UARTEx_ReceiveToIdle_DMA(&huart2, rx_kociemba, 64); // prepare to receive alg
 	HAL_UART_Transmit_DMA(&huart2, tx_start, 6);
 	// TODO camera processing
-	Turn_LED_Off();
 }
 
 void cube_solving_helper(uint8_t speed){
 	Displ_FillArea(20, 380, 280, 100, DDD_WHITE);
 	Displ_WString(45, 420, "Solving Cube!", Font24, 1, WHITE, DDD_WHITE);
-	if(solve_ready_flag == 1){ // algorithm received from Pi!
-		if(speed == PARTY){
-			Party_LED();
-			Cube_Execute_String(kociemba_string);
-			Turn_LED_Off();
-		}
-		else{
-			Cube_Execute_String(kociemba_string); //TODO add speed input
-		}
+	if(speed == PARTY){
+		Party_LED();
+		Cube_Execute_String(kociemba_string);
+	}
+	else{
+		Load_Cube();
+		Cube_Execute_String(kociemba_string); //TODO add speed input
 	}
 
 	// TODO TODO check for solved state??
@@ -133,7 +127,7 @@ void solve_mode_touch(){
 		}
 
 		// Check RESHUFFLE
-		else if (solve_state == 1 && x >= 370 && x <= 650 && y >= 0 && y <= 95) {
+		else if (solve_state == 2 && x >= 370 && x <= 650 && y >= 0 && y <= 95) {
 			 Displ_FillArea(20, 380, 280, 100, GREEN);
 			 Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, GREEN);
 			 //TODO TODO reshuffle alg
@@ -145,9 +139,10 @@ void solve_mode_touch(){
 		// start solving cube
 		if(mode != INV){
 			solve_state = 1;
+			//TODO NEED TO MAKE MODE GLOBAL
 			camera_processing_helper();
-			cube_solving_helper(mode);
-			solve_reshuffle_display();
+			//cube_solving_helper(mode);
+			//solve_reshuffle_display();
 		}
 	}
 }

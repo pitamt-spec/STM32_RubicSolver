@@ -109,7 +109,25 @@ int main(void)
 			solve_mode_display();
 		}
 	    // poll for touch
-	    solve_mode_touch();
+	    if(solve_state == 0){
+	    	solve_mode_touch();
+	    }
+
+	    // If we have already pressed a button and are waiting for the Pi
+		else if (solve_state == 1) {
+			if (solve_ready_flag == 1) {
+				// THE PI RESPONDED!
+				cube_solving_helper(NORMAL); //TODO implement speed
+
+				solve_ready_flag = 0; // Clear flag
+				solve_state = 2;
+			}
+		}
+		// If we are on the reshuffle screen
+		else if (solve_state == 2) {
+			solve_reshuffle_display();
+			solve_mode_touch(); // should handle reshuffle
+		}
 	}
 
 	// ---- STEP-BY-STEP ----
@@ -198,7 +216,7 @@ int main(void)
   Displ_BackLight('I');  					// initialize backlight
   Displ_BackLight('1');						// light-up display at max light level
 
-  HAL_UART_Transmit(&huart2, (uint8_t*)"HELLO\r\n", 7, 100);
+  //HAL_UART_Transmit(&huart2, (uint8_t*)"HELLO\r\n", 7, 100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -931,9 +949,6 @@ PUTCHAR_PROTOTYPE
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
     if (huart->Instance == USART2) {
-    	// clear buffer
-    	memset(kociemba_string, 0, sizeof(kociemba_string));
-
         memcpy(kociemba_string, rx_kociemba, Size); // copy data and make it readable
         kociemba_string[Size] = '\0';
 
