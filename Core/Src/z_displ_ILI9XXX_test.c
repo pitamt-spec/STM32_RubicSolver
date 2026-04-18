@@ -32,8 +32,8 @@
 
 #include "main.h"
 #include <stdio.h>
-#define min(a,b) (((a)<(b))?(a):(b))
-#define max(a,b) (((a)>(b))?(a):(b))
+//#define min(a,b) (((a)<(b))?(a):(b))
+//#define max(a,b) (((a)>(b))?(a):(b))
 
 extern int16_t _width;       								///< (oriented) display width
 extern int16_t _height;      								///< (oriented) display height

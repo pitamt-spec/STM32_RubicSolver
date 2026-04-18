@@ -30,9 +30,22 @@ void Cube_Init(Motor *m1, Motor *m2, Motor *m3,
 void Cube_Move(CubeMove move, MoveType type);
 
 // run a sequence
-void Cube_Execute(const CubeMove *moves,
-                  const MoveType *types,
-                  uint32_t length);
+void Cube_Execute();
 
+// Philosopically this parses
+void String_To_Moves(const char *str);
+
+// Public API to do move sequence
+void Cube_Execute_String(const char *str);
+
+//Pattern rapid fire
+void Flower_Pattern(void);
+void Dot_Pattern(void);
+void Bird_Pattern(void);
+void Fish_Pattern(void);
+void Cross_Pattern(void);
+void Chess_Pattern(void);
+
+void Cube_Execute_Reverse(void);
 
 #endif

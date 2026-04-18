@@ -9,7 +9,7 @@ volatile uint8_t stepper_done = 0;
 
 static Motor *active_motor = NULL; /*might be used for debug*/
 
-
+//Initialize Motor
 void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id)
 {
 	if (mmotor == NULL) return;
@@ -20,6 +20,7 @@ void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id)
     mmotor->DIR = MOTOR_DIR_CW; /*value for the sake of having a value*/
 }
 
+// Helper function to select motor from demux
 static void Mux_Select(uint8_t s2, uint8_t s1, uint8_t s0)
 {
     HAL_GPIO_WritePin(DEMUX_S0_GPIO_Port, DEMUX_S0_Pin, s0 ? GPIO_PIN_SET : GPIO_PIN_RESET);
@@ -27,6 +28,7 @@ static void Mux_Select(uint8_t s2, uint8_t s1, uint8_t s0)
     HAL_GPIO_WritePin(DEMUX_S2_GPIO_Port, DEMUX_S2_Pin, s2 ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
+// Selects one motor to move
 void Motor_Select(const Motor *mmotor)
 {
 	if (mmotor == NULL) return;
@@ -40,20 +42,12 @@ void Motor_Select(const Motor *mmotor)
         case MOTOR_6: Mux_Select(1,0,1); break;
         default: break;
     }
-    /*extend in theory as i add motors 2-5*/
 }
 
-
-
+// Set Direction of a given motor (mmotor)
 void Motor_SetDirection(const Motor *mmotor)
 {
 	if (mmotor == NULL) return;
-	// MELISSA CHANGED THIS
-	// it used to be HAL_GPIO_WritePin(STEPPER_DIR_PORT, STEPPER_DIR_PIN, .....
-	/*
-	 * Need to fix this to add direction
-	 * but highkey me too lazy to fix pins
-	 * */
 	switch (mmotor->ID)
 	{
 	case MOTOR_1:
@@ -84,6 +78,7 @@ void Motor_SetDirection(const Motor *mmotor)
 	}
 }
 
+// Send Steps to a given motor
 void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
 {
 	if (mmotor == NULL || mmotor->clk == NULL || steps == 0) return;
@@ -120,17 +115,13 @@ void Motor_RunMove(Motor *mmotor, uint32_t steps)
     //Motor_DisableAll();
     Motor_Select(mmotor);
     Motor_SetDirection(mmotor);
-    /*
-     * Assume we are not going to mux dir and en
-     * Propose to just have the singal sent to all motors at all times
-     * None would advance without a step anyhow
-     */
     Motor_SendSteps_Blocking(mmotor,steps);
+    HAL_Delay(100);
     //Motor_DisableAll();
 }
 
 
-/*The interupt that counts up to fifity.*/
+/*The interrupt that counts up to fifty.*/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM4)
