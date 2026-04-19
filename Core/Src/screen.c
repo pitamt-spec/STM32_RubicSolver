@@ -175,7 +175,7 @@ void step_by_step_main_display(){
 	Displ_WString(120, 150, "/", Font20, 1, WHITE, BLACK);
 	Displ_WString(140, 150, total_moves_str, Font20, 1, WHITE, BLACK);
 
-	Displ_FillArea(20, 400, 130, 60, DD_GREEN);        // X=10, Y=380, Width=130, Height=60
+	Displ_FillArea(20, 400, 130, 60, DDD_WHITE);        // X=10, Y=380, Width=130, Height=60
 	Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DDD_WHITE);
 
 	Displ_FillArea(170, 400, 130, 60, DD_BLUE);        // X=140, Y=180, Width=130, Height=60
@@ -235,6 +235,10 @@ void step_by_step_touch(){
 				Touch_WaitForUntouch(2000); // debounce
 
 				current_move++;
+				if(current_move == 1){
+					Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
+					Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DD_CYAN);
+				}
 
 				char curr_move_str[10]; // Create a small temporary buffer
 				sprintf(curr_move_str, "%d", current_move); // Convert number to string

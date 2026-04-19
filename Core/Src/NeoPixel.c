@@ -112,7 +112,7 @@ void Load_Cube(void)
 	Set_Ring(LED_6,255,50,0); // Orange
 
 
-	Set_Brightness(10);
+	Set_Brightness(8);
 	WS2812_Send();
 }
 /*
