@@ -6,6 +6,7 @@
 #define STEPS_190	844
 #define STEPS_100	444
 #define STEPS_10	44
+#define STEPS_15	66
 #define MAX_CUBE_MOVES 64 // Prevent garbage bs
 
 
@@ -71,6 +72,7 @@ static void Cube_ApplyMove(Motor *m, MoveType type)
         m->DIR = MOTOR_DIR_CCW;
         Motor_RunMove(m, STEPS_100);
         m->DIR = MOTOR_DIR_CW;
+//        Motor_RunMove(m, (m->ID != MOTOR_4) ? STEPS_10 : STEPS_15);
         Motor_RunMove(m, STEPS_10);
         break;
 

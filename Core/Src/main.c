@@ -92,7 +92,7 @@ uint8_t total_moves = 0;
 uint8_t current_move = 0;
 
 //UART  buffers and variables
-uint8_t tx_start[] = "Start\n";
+uint8_t tx_start[] = "Start";
 uint8_t rx_kociemba[64];                           // Buffer for Pi response
 char kociemba_string[64];                          // For use in your function
 uint8_t volatile solve_ready_flag = 0;
@@ -632,7 +632,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 15;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 7999;
+  htim4.Init.Period = 3999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)

@@ -20,8 +20,9 @@ void camera_processing_helper(){
 	Set_All_To_Scan_Color();
 	memset(rx_kociemba, 0, 64);
     HAL_UARTEx_ReceiveToIdle_DMA(&huart2, rx_kociemba, 64); // prepare to receive alg
-	HAL_UART_Transmit_DMA(&huart2, tx_start, 6);
+	HAL_UART_Transmit_DMA(&huart2, tx_start, 5);
 	while(solve_ready_flag == 0){} //wait for response from pi
+
 }
 
 void cube_solving_helper(uint8_t speed){ //only calling this once pi responds
@@ -93,6 +94,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 50, 280, 100, RED);
 			Displ_WString(115, 90, "Normal", Font20, 1, WHITE, RED);
 			mode = NORMAL;
+
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
