@@ -78,8 +78,8 @@ void Set_All_To_Scan_Color(void)
 {
     // RGB values for {255, 200, 150}
     uint8_t r = 255;
-    uint8_t g = 200;
-    uint8_t b = 150;
+    uint8_t g = 255;
+    uint8_t b = 255;
 
     // Apply this color to all 6 rings
     for (int i = 0; i < 6; ++i)

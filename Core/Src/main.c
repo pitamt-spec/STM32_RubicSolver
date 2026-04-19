@@ -25,6 +25,8 @@
 #include "motor.h"
 #include "test_suite.h"
 #include "screen.h"
+#include "NeoPixel.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -125,7 +127,6 @@ int main(void)
 		}
 		// If we are on the reshuffle screen
 		else if (solve_state == 2) {
-			solve_reshuffle_display();
 			solve_mode_touch(); // should handle reshuffle
 		}
 	}
@@ -217,6 +218,8 @@ int main(void)
   Displ_CLS(BLACK);							// clear the screen
   Displ_BackLight('I');  					// initialize backlight
   Displ_BackLight('1');						// light-up display at max light level
+  //set lights to starting setting
+  Load_Cube();
 
   //HAL_UART_Transmit(&huart2, (uint8_t*)"HELLO\r\n", 7, 100);
   /* USER CODE END 2 */

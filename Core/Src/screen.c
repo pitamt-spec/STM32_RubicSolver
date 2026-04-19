@@ -21,11 +21,10 @@ void camera_processing_helper(){
 	memset(rx_kociemba, 0, 64);
     HAL_UARTEx_ReceiveToIdle_DMA(&huart2, rx_kociemba, 64); // prepare to receive alg
 	HAL_UART_Transmit_DMA(&huart2, tx_start, 6);
-	while(solve_state == 1){} //wait for response from pi
-	// TODO camera processing
+	while(solve_ready_flag == 0){} //wait for response from pi
 }
 
-void cube_solving_helper(uint8_t speed){
+void cube_solving_helper(uint8_t speed){ //only calling this once pi responds
 	Displ_FillArea(20, 380, 280, 100, DDD_WHITE);
 	Displ_WString(45, 420, "Solving Cube!", Font24, 1, WHITE, DDD_WHITE);
 	if(speed == PARTY){
@@ -36,7 +35,7 @@ void cube_solving_helper(uint8_t speed){
 		Load_Cube();
 		Cube_Execute_String(kociemba_string); //TODO add speed input
 	}
-
+	solve_reshuffle_display();
 	// TODO TODO check for solved state??
 }
 
