@@ -26,7 +26,7 @@ static void LED_Helper(uint8_t B, uint8_t R, uint8_t G) // TODO remove after deb
     HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, G ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-static void LED_FromMove(CubeMove move) // TODO remove after debugging
+static void LED_FromMove(CubeMove move)
 {
     switch (move)
     {

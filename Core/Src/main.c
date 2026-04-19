@@ -87,12 +87,15 @@ uint8_t prev_mode = 0;
 uint8_t pretty_pattern_selected = 0;
 uint8_t solve_state = 0;
 uint8_t solve_mode = 5;
+uint8_t step_by_step_state = 0;
+uint8_t total_moves = 0;
+uint8_t current_move = 0;
 
 //UART  buffers and variables
-uint8_t tx_start[] = "start\n";
+uint8_t tx_start[] = "Start\n";
 uint8_t rx_kociemba[64];                           // Buffer for Pi response
 char kociemba_string[64];                          // For use in your function
-uint8_t solve_ready_flag = 0;                      // Logic trigger
+uint8_t volatile solve_ready_flag = 0;
 /* USER CODE END 0 */
 
 /**
@@ -151,10 +154,14 @@ int main(void)
 		if(prev_mode !=3) {
 			Displ_CLS(BLACK);	 //clear display
 			//TODO add check for solved state??
-			pretty_pattern_selected = 0; //reset every time mode is changed
-			pattern_mode_display();
+//			pretty_pattern_selected = 0; //reset every time mode is changed //TODO uncomment
+//			pattern_mode_display(); //TODO uncomment
+			step_by_step_state = 0; // reset every time mode is changed //TODO move to mode 2
+			step_by_step_start_display(); // TODO move to mode 2
+
 		}
-		pattern_mode_touch();
+//		pattern_mode_touch(); //TODO uncomment
+		step_by_step_touch(); //TODO move to mode 2
 	}
 
 
@@ -235,7 +242,6 @@ int main(void)
 		ADC_VAL = HAL_ADC_GetValue(&hadc1);//retrieve value
 
 		int mode = (ADC_VAL / 1024) + 1; // four modes (1-4)
-		// TODO add delay to account for turning dial
 		switch(mode){
 		case 1:
 		  mode1();

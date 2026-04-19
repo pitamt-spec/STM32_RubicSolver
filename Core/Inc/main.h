@@ -51,9 +51,13 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+extern uint8_t total_moves;
+extern uint8_t current_move;
 extern uint8_t prev_mode; // stops screen from refreshing every time adc is polled
 extern uint8_t solve_state; // tracker for state of solve mode
 extern uint8_t solve_mode; // int representing solve mode (normal, fast, super fast, party)
+extern volatile uint8_t solve_ready_flag;             // Logic trigger
+extern uint8_t step_by_step_state; // tracker for state of step-by-step mode ( 0 - start, 1 - solve, 2 - done)
 extern uint8_t pretty_pattern_selected; //BOOL for pretty pattern screen state machine
 /* USER CODE END EM */
 

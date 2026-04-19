@@ -148,17 +148,45 @@ void solve_mode_touch(){
 }
 
 // Display menu for Step-by_step
-void step_by_step_display(){
+void step_by_step_start_display(){
 	// Title
 	Displ_WString(10, 10, "Step-by-Step", Font24, 1, WHITE, BLACK); // X=10, Y=10
 
 	// --- Solve ---
-	Displ_FillArea(10, 180, 280, 120, MAGENTA);        // X=10, Y=180, Width=280, Height=120
-	Displ_WString(70, 230, "SOLVE", Font20, 1, WHITE, MAGENTA);
+	Displ_FillArea(20, 380, 280, 90, DD_GREEN);        // X=20, Y=380, Width=280, Height=100
+	Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 
+	current_move = 0;
+	//TODO change this
+	total_moves = 10;
 }
 
-// Poll for touch for test mode (2)
+void step_by_step_main_display(){
+	Displ_FillArea(20, 380, 280, 90, BLACK);        // X=10, Y=380, Width=280, Height=90
+
+	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
+	Displ_WString(10, 120, "123456789012345678901234567890", Font12, 1, WHITE, BLACK); //TODO replace this with kociemba string
+
+	char total_moves_str[10]; // Create a small temporary buffer
+	sprintf(total_moves_str, "%d", total_moves); // Convert number to string
+
+	Displ_WString(10, 150, "Move: ", Font20, 1, WHITE, BLACK);
+	Displ_WString(90, 150, "0", Font20, 1, WHITE, BLACK);
+	Displ_WString(120, 150, "/", Font20, 1, WHITE, BLACK);
+	Displ_WString(140, 150, total_moves_str, Font20, 1, WHITE, BLACK);
+
+	Displ_FillArea(20, 400, 130, 60, DD_GREEN);        // X=10, Y=380, Width=130, Height=60
+	Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DDD_WHITE);
+
+	Displ_FillArea(170, 400, 130, 60, DD_BLUE);        // X=140, Y=180, Width=130, Height=60
+	Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, DD_BLUE);
+}
+
+void step_by_step_done_display(){
+	solve_reshuffle_display();
+}
+
+// Poll for touch for step-by-step mode (2)
 void step_by_step_touch(){
 	uint16_t x = 0;
 	uint16_t y = 0;
@@ -168,35 +196,62 @@ void step_by_step_touch(){
 	Touch_GetXYtouch(&x, &y, &isTouch);
 
 	if (isTouch) {
-		//printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
+		printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
 
-		/*
-		 * Goals:
-		 * - get move sequence
-		 * - load new screen w/
-		 * 		-   Retry
-		 * 		- Prev Next
-		 * 		- Maybe moves cnt (will add a variable for size soon)
-		 * - Call UART to generate solve sequence
-		 * -
-		 * */
+		if (step_by_step_state == 0 && x >= 370 && x <= 650 && y >= 0 && y <= 95) {
+			// --- START ---
+			Displ_FillArea(20, 380, 280, 90, D_GREEN);        // X=20, Y=380, Width=280, Height=100
+			Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
+			step_by_step_state = 1;
+			step_by_step_main_display();
+			//TODO camera processing goes here (look at solve mode for inspo, need UART)
+		}
+		// PREV
+		else if (step_by_step_state == 1  && x >= 370 && x <= 500 && y >= 0 && y <= 75){
+			if(current_move > 0){
+				Displ_FillArea(20, 400, 130, 60, D_CYAN);        // X=10, Y=380, Width=130, Height=60
+				Displ_WString(60, 420, "PREV", Font20, 1, WHITE, D_CYAN);
+				Touch_WaitForUntouch(2000); // debounce
+				current_move --;
+				//TODO move cube (use curr move to index into kociemba)
 
-		if (x >= 370 && x <= 635 && y >= 310 && y <= 420) {
+				char curr_move_str[10]; // Create a small temporary buffer
+				sprintf(curr_move_str, "%d", current_move); // Convert number to string
 
-			/*I think this is the reset box*/
-			Displ_FillArea(10, 50, 280, 120, MAGENTA);
-			Displ_WString(70, 100, "Retry", Font20, 1, WHITE, MAGENTA);
+				Displ_FillArea(90, 150, 20, 20, BLACK);
+				Displ_WString(90, 150, curr_move_str, Font20, 1, WHITE, BLACK);
 
-			/*I think this is the prev and next box*/
-			Displ_FillArea(10, 260, 130, 40, MAGENTA);
-			Displ_WString(70, 310, "Prev", Font20, 1, WHITE, MAGENTA);
+				Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
+				Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DD_CYAN);
+			}
+		}
 
-			Displ_FillArea(160, 260, 130, 40, MAGENTA);
-			Displ_WString(210, 310, "Next", Font20, 1, WHITE, MAGENTA);
+		// NEXT
+		else if (step_by_step_state == 1  && x >= 510 && x <= 645 && y >= 0 && y <= 75){
+			if(current_move < total_moves){
+				// TODO move cube (use curr move to index into kociemba)
+				Displ_FillArea(170, 400, 130, 60, D_BLUE);        // X=140, Y=180, Width=130, Height=60
+				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, D_BLUE);
+				Touch_WaitForUntouch(2000); // debounce
 
-			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
-//			Displ_FillArea(10, 50, 280, 120, DD_GREEN);
-//			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, DD_GREEN);
+				current_move++;
+
+				char curr_move_str[10]; // Create a small temporary buffer
+				sprintf(curr_move_str, "%d", current_move); // Convert number to string
+
+				Displ_FillArea(90, 150, 20, 20, BLACK);
+				Displ_WString(90, 150, curr_move_str, Font20, 1, WHITE, BLACK);
+
+				Displ_FillArea(170, 400, 130, 60, DD_BLUE);        // X=140, Y=180, Width=130, Height=60
+				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, DD_BLUE);
+
+			}
+
+			else{
+				step_by_step_done_display();
+			}
+
+
 		}
 	}
 }
@@ -236,8 +291,7 @@ void test_mode_touch(){
 		if (x >= 370 && x <= 635 && y >= 310 && y <= 420) {
 			Displ_FillArea(10, 50, 280, 120, D_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, D_GREEN);
-			//TODO ADD ALG CODE HERE
-			Set_All_To_Scan_Color();
+			Set_All_To_Scan_Color();  //change this to change alg
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 50, 280, 120, DD_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, DD_GREEN);
@@ -247,8 +301,7 @@ void test_mode_touch(){
 		else if (x >= 370 && x <= 635 && y >= 180 && y <= 295) {
 			Displ_FillArea(10, 180, 280, 120, D_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, D_GREEN);
-			//TODO ADD ALG CODE HERE
-			Turn_LED_Off();
+			Turn_LED_Off(); // change this to change alg
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 180, 280, 120, DD_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, DD_GREEN);
@@ -258,9 +311,8 @@ void test_mode_touch(){
 		else if (x >= 370 && x <= 635 && y >= 45 && y <= 170) {
 			Displ_FillArea(10, 310, 280, 120, D_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, D_GREEN);
-			//TODO ADD ALG CODE HERE
 			//Load_Cube();
-			Set_All_Next_Color();
+			Set_All_Next_Color(); // change this to change alg.
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 310, 280, 120, DD_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, DD_GREEN);
