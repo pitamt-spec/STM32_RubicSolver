@@ -74,6 +74,23 @@ void Set_All_Next_Color(void)
     mode = (mode + 1) % 6;
 }
 
+void Set_All_To_Scan_Color(void)
+{
+    // RGB values for {255, 200, 150}
+    uint8_t r = 255;
+    uint8_t g = 200;
+    uint8_t b = 150;
+
+    // Apply this color to all 6 rings
+    for (int i = 0; i < 6; ++i)
+    {
+        Set_Ring(i, r, g, b);
+    }
+
+    Set_Brightness(1); // Set brightness to minimum
+    WS2812_Send();     // Update the physical LEDs
+}
+
 void Load_Cube(void)
 {
 	/*
@@ -95,7 +112,7 @@ void Load_Cube(void)
 	Set_Ring(LED_6,255,50,0); // Orange
 
 
-	Set_Brightness(20);
+	Set_Brightness(10);
 	WS2812_Send();
 }
 /*

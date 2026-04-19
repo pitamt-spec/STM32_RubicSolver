@@ -135,11 +135,13 @@ int main(void)
 		//Party_LED();
 	    if(prev_mode != 2) {
 			Displ_CLS(BLACK);	 //clear display
+//			step_by_step_display(); //trial test
 			test_mode_display(); // TODO REMOVE TEST MODE
 		}
 
 	    // poll for touch
 	    test_mode_touch(); //TODO remove test mode
+//	    step_by_step_touch();
 	}
 
 	// ----PRETTY PATTERNS ----
@@ -223,7 +225,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		//mode code below !
+		//code below !
 		uint32_t ADC_VAL = 0;
 		HAL_ADC_Start(&hadc1);//start conversion
 		HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);//wait for conversion to finish
@@ -953,7 +955,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
         kociemba_string[Size] = '\0';
 
         solve_ready_flag = 1;
-        printf("Pi sent solution (%d chars): %s\r\n", Size, kociemba_string); //TODO DEBUGGING
     }
 }
 /* USER CODE END 4 */

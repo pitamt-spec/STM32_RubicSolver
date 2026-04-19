@@ -17,10 +17,11 @@ void camera_processing_helper(){
 	Displ_FillArea(20, 380, 280, 100, DDD_WHITE);
 	Displ_WString(45, 420, "Scanning Cube", Font24, 1, WHITE, DDD_WHITE);
 
-	All_White();
+	Set_All_To_Scan_Color();
 	memset(rx_kociemba, 0, 64);
     HAL_UARTEx_ReceiveToIdle_DMA(&huart2, rx_kociemba, 64); // prepare to receive alg
 	HAL_UART_Transmit_DMA(&huart2, tx_start, 6);
+	while(solve_state == 1){} //wait for response from pi
 	// TODO camera processing
 }
 
@@ -147,6 +148,60 @@ void solve_mode_touch(){
 	}
 }
 
+// Display menu for Step-by_step
+void step_by_step_display(){
+	// Title
+	Displ_WString(10, 10, "Step-by-Step", Font24, 1, WHITE, BLACK); // X=10, Y=10
+
+	// --- Solve ---
+	Displ_FillArea(10, 180, 280, 120, MAGENTA);        // X=10, Y=180, Width=280, Height=120
+	Displ_WString(70, 230, "SOLVE", Font20, 1, WHITE, MAGENTA);
+
+}
+
+// Poll for touch for test mode (2)
+void step_by_step_touch(){
+	uint16_t x = 0;
+	uint16_t y = 0;
+	uint8_t isTouch = 0;
+
+	// Get touch data
+	Touch_GetXYtouch(&x, &y, &isTouch);
+
+	if (isTouch) {
+		//printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
+
+		/*
+		 * Goals:
+		 * - get move sequence
+		 * - load new screen w/
+		 * 		-   Retry
+		 * 		- Prev Next
+		 * 		- Maybe moves cnt (will add a variable for size soon)
+		 * - Call UART to generate solve sequence
+		 * -
+		 * */
+
+		if (x >= 370 && x <= 635 && y >= 310 && y <= 420) {
+
+			/*I think this is the reset box*/
+			Displ_FillArea(10, 50, 280, 120, MAGENTA);
+			Displ_WString(70, 100, "Retry", Font20, 1, WHITE, MAGENTA);
+
+			/*I think this is the prev and next box*/
+			Displ_FillArea(10, 260, 130, 40, MAGENTA);
+			Displ_WString(70, 310, "Prev", Font20, 1, WHITE, MAGENTA);
+
+			Displ_FillArea(160, 260, 130, 40, MAGENTA);
+			Displ_WString(210, 310, "Next", Font20, 1, WHITE, MAGENTA);
+
+			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
+//			Displ_FillArea(10, 50, 280, 120, DD_GREEN);
+//			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, DD_GREEN);
+		}
+	}
+}
+
 
 // Display menu for test mode (2)
 void test_mode_display(){
@@ -183,7 +238,7 @@ void test_mode_touch(){
 			Displ_FillArea(10, 50, 280, 120, D_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, D_GREEN);
 			//TODO ADD ALG CODE HERE
-			Set_All_Next_Color();
+			Set_All_To_Scan_Color();
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 50, 280, 120, DD_GREEN);
 			Displ_WString(70, 100, "ALGORITHM 1", Font20, 1, WHITE, DD_GREEN);
@@ -205,7 +260,8 @@ void test_mode_touch(){
 			Displ_FillArea(10, 310, 280, 120, D_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, D_GREEN);
 			//TODO ADD ALG CODE HERE
-			Load_Cube();
+			//Load_Cube();
+			Set_All_Next_Color();
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 310, 280, 120, DD_GREEN);        // X=10, Y=310, Width=280, Height=120
 			Displ_WString(70, 360, "ALGORITHM 3", Font20, 1, WHITE, DD_GREEN);
