@@ -44,7 +44,7 @@
  ***** If external flash handled by TOUCHGFX,******
  ************* let #define commented **************
  **************************************************/
-#define EXT_FLASH_BASEADDRESS 0X90000000 // mapped flash base address
+//#define EXT_FLASH_BASEADDRESS 0X90000000 // mapped flash base address
 
 
 /*****************     STEP 1      *****************
@@ -59,8 +59,8 @@
  * which display are you using?
  *************************************************/
 //#define ILI9341
-//#define ILI9488_V1
-#define ILI9488_V2
+#define ILI9488_V1
+//#define ILI9488_V2
 
 
 /******************    STEP 3    ******************
@@ -78,8 +78,8 @@
  * when transferring data to/from DISPLAY or TOUCH
  * Keep in mind that Touch SPI Baudrate should be no more than 1 Mbps
  ***************************************************/
-#define DISPL_PRESCALER SPI_BAUDRATEPRESCALER_4     //prescaler assigned to display SPI port
-#define TOUCH_PRESCALER SPI_BAUDRATEPRESCALER_256	//prescaler assigned to touch device SPI port
+#define DISPL_PRESCALER SPI_BAUDRATEPRESCALER_2     //prescaler assigned to display SPI port
+#define TOUCH_PRESCALER SPI_BAUDRATEPRESCALER_32	//prescaler assigned to touch device SPI port
 
 
 /*****************     STEP 5      *****************
@@ -108,12 +108,12 @@
  * let timer clock to be higher than COUNTER PERIOD * 100 Hz.
  * Set all other defines below
  ***************************************************/
-#define DISPLAY_DIMMING_MODE						// uncomment this define to enable dimming function otherwise there is an on/off switching function
-#define BKLIT_TIMER 				TIM2			//timer used (PWMming DISPL_LED pin)
-#define BKLIT_T 					htim2			//timer used
-#define BKLIT_CHANNEL				TIM_CHANNEL_1	//channel used
-#define BKLIT_CCR					CCR1			//Capture-compare register used (same number as channel)
-#define BKLIT_STBY_LEVEL 			50				//Display backlight level when in stand-by (levels are CNT values)
+//#define DISPLAY_DIMMING_MODE						// uncomment this define to enable dimming function otherwise there is an on/off switching function
+//#define BKLIT_TIMER 				TIM2			//timer used (PWMming DISPL_LED pin)
+//#define BKLIT_T 					htim2			//timer used
+//#define BKLIT_CHANNEL				TIM_CHANNEL_1	//channel used
+//#define BKLIT_CCR					CCR1			//Capture-compare register used (same number as channel)
+//#define BKLIT_STBY_LEVEL 			50				//Display backlight level when in stand-by (levels are CNT values)
 #define BKLIT_INIT_LEVEL 			100				//Display backlight level on startup
 
 
@@ -130,8 +130,8 @@
  * if not in TouchGFX-full-mode: assign macros to
  * an unused timer
  ***************************************************/
-#define TGFX_TIMER			TIM3
-#define TGFX_T				htim3
+#define TGFX_TIMER			TIM1
+#define TGFX_T				htim1
 
 
 /*****************     STEP 8      *****************

@@ -1,7 +1,4 @@
 #include "test_suite.h"
-#include "motor.h"
-#include "cube.h"
-#include "Neo_Pixel.h"
 
 #define TEST_STEPS_90_DEG   	400
 #define TEST_STEPS_180_DEG   	800
@@ -13,16 +10,19 @@ static Motor* motor4 = NULL;
 static Motor* motor5 = NULL;
 static Motor* motor6 = NULL;
 
+
 static void LED_Helper(uint8_t B, uint8_t R, uint8_t G);
 static void LED_On(const Motor *mmotor);
 static void Test_Motor(Motor *mmotor, uint32_t steps);
-static void Move_Helper(Motor *mmotor);
+static void Move_Helper(Motor *mmotor); //TODO implement
 
-static void TestSuite_RunOnce(void);
+static void TestSuite_RunOnce(void); //TODO implement
 static void Basic_Solve(void);
 
+void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmotor4, Motor *mmotor5, Motor *mmotor6);
+void TestSuite_RunLoop(void);
 
-//just make sure all the lights are off
+// just make sure all the lights are off
 void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmotor4, Motor *mmotor5, Motor *mmotor6)
 {
 	if (mmotor1 == NULL || mmotor2 == NULL || mmotor3 == NULL || mmotor4 == NULL || mmotor5 == NULL || mmotor6 == NULL) return;
@@ -147,22 +147,16 @@ void Test_Motor_RunOnce(void)
 
 /*
  *Setting diff colors to the LEDs
- *Increase the birghtness every 50 ms
+ *Increase the brightness every 50 ms
  *and decreasing brightness
  * */
 void Test_WS2812_RunOnce(void)
 {
-	Set_LED(0, 255, 0, 0);
-	Set_LED(1, 0, 255, 0);
-	Set_LED(2, 0, 0, 255);
+	for(int i = 0; i < 144; ++i)
+	{
+		Set_LED(i,255,0,0); // white
+	}
 
-	Set_LED(3, 46, 89, 128);
-
-	Set_LED(4, 156, 233, 100);
-	Set_LED(5, 102, 0, 235);
-	Set_LED(6, 47, 38, 77);
-
-	Set_LED(7, 255, 200, 0);
 
 	for (int i=0; i<46;i++)
 	{
@@ -178,21 +172,6 @@ void Test_WS2812_RunOnce(void)
 		HAL_Delay(50);
 	}
 
-	/*Start motor 5*/
-	motor5->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor5, TEST_STEPS_90_DEG);
-	HAL_Delay(500);
-	motor5->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor5, TEST_STEPS_90_DEG);
-	HAL_Delay(500);
-
-	/*Start motor 6*/
-	motor6->DIR = MOTOR_DIR_CW;
-	Test_Motor(motor6, TEST_STEPS_90_DEG);
-	HAL_Delay(500);
-	motor6->DIR = MOTOR_DIR_CCW;
-	Test_Motor(motor6, TEST_STEPS_90_DEG);
-	HAL_Delay(500);
 }
 
 /*Can add more TestSuite stuff if you want */
@@ -328,8 +307,9 @@ void T_Perm_Test(void)
 void TestSuite_RunLoop(void)
 {
     //TestSuite_RunOnce();
-	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
-	BullShit_Test();
-	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
+//	BullShit_Test();
+//	HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
+	Party_LED();
 
 }

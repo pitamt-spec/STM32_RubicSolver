@@ -1,21 +1,32 @@
 #include "cube.h"
 
-#define STEPS_90   400
-#define STEPS_180  800
+#define STEPS_90   400 // TODO remove?
+#define STEPS_180  800 //TODO remove?
+
+#define STEPS_190	844
+#define STEPS_100	444
+#define STEPS_10	44
+#define MAX_CUBE_MOVES 64 // Prevent garbage bs
+
 
 static Motor *g_motors[MOVE_COUNT];
 
+//TODO: I highkey dont know what the size should be
+//MELISSA: lets start with 24??
+static CubeMove moves[MAX_CUBE_MOVES];
+static MoveType types[MAX_CUBE_MOVES];
+static uint32_t g_move_count = 0;
+
 static void Cube_ApplyMove(Motor *m, MoveType type);
 
-
-static void LED_Helper(uint8_t B, uint8_t R, uint8_t G)
+static void LED_Helper(uint8_t B, uint8_t R, uint8_t G) // TODO remove after debugging
 {
     HAL_GPIO_WritePin(LED_BLUE_GPIO_Port,  LED_BLUE_Pin,  B ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_RED_GPIO_Port,   LED_RED_Pin,   R ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, G ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-static void LED_FromMove(CubeMove move)
+static void LED_FromMove(CubeMove move) // TODO remove after debugging
 {
     switch (move)
     {
@@ -33,41 +44,51 @@ static void LED_FromMove(CubeMove move)
 void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6){
 	if (!m1 || !m2 || !m3 || !m4 || !m5 || !m6) return;
 
-	g_motors[MOVE_R] = m1;
-    g_motors[MOVE_U] = m2;
-    g_motors[MOVE_F] = m3;
-    g_motors[MOVE_L] = m4;
+//	g_motors[MOVE_R] = m1;
+//    g_motors[MOVE_U] = m2;
+//    g_motors[MOVE_F] = m3;
+//    g_motors[MOVE_L] = m4;
+//    g_motors[MOVE_D] = m5;
+//    g_motors[MOVE_B] = m6;
+
+    g_motors[MOVE_F] = m1;
+    g_motors[MOVE_L] = m2;
+    g_motors[MOVE_U] = m3;
+    g_motors[MOVE_B] = m4;
     g_motors[MOVE_D] = m5;
-    g_motors[MOVE_B] = m6;
+    g_motors[MOVE_R] = m6;
 
 }
 
-/*TODO: MAke this shit turn 100 then back 10 for 90 degrees*/
+/* MELISSA: made cube move 100 then back 10 for 90 deg, and 190 and back 10 for 180 deg */
 static void Cube_ApplyMove(Motor *m, MoveType type)
 {
     if (!m) return;
-
-    uint32_t steps = STEPS_90;
-
+    HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_RESET);
     switch (type)
     {
     case MOVE_NORMAL:
         m->DIR = MOTOR_DIR_CCW;
-        steps = STEPS_90;
+        Motor_RunMove(m, STEPS_100);
+        m->DIR = MOTOR_DIR_CW;
+        Motor_RunMove(m, STEPS_10);
         break;
 
     case MOVE_PRIME:
         m->DIR = MOTOR_DIR_CW;
-        steps = STEPS_90;
+        Motor_RunMove(m, STEPS_100);
+		m->DIR = MOTOR_DIR_CCW;
+		Motor_RunMove(m, STEPS_10);
         break;
 
     case MOVE_DOUBLE:
         m->DIR = MOTOR_DIR_CW;
-        steps = STEPS_180;
+        Motor_RunMove(m, STEPS_190);
+        m->DIR = MOTOR_DIR_CCW;
+        Motor_RunMove(m, STEPS_10);
         break;
     }
-
-    Motor_RunMove(m, steps);
+    HAL_GPIO_WritePin(STPR_EN_GPIO_Port, STPR_EN_Pin, GPIO_PIN_SET);
 }
 
 void Cube_Move(CubeMove move, MoveType type)
@@ -81,13 +102,145 @@ void Cube_Move(CubeMove move, MoveType type)
     LED_Helper(0,0,0);
 }
 
-void Cube_Execute(const CubeMove *moves,
-                  const MoveType *types,
-                  uint32_t length)
+void Cube_Execute(void)
 {
-    for (uint32_t i = 0; i < length; i++)
+	if (g_move_count == 0) return; // this should be bad i think
+    for (uint32_t i = 0; i <  g_move_count; i++)
     {
         Cube_Move(moves[i], types[i]);
-//        HAL_Delay(100); // optional spacing
     }
 }
+
+void Cube_Execute_Reverse(void)
+{
+    for (int i = g_move_count - 1; i >= 0; i--)
+    {
+        MoveType inv;
+
+        if (types[i] == MOVE_NORMAL) inv = MOVE_PRIME;
+        else if (types[i] == MOVE_PRIME) inv = MOVE_NORMAL;
+        else inv = MOVE_DOUBLE;
+
+        Cube_Move(moves[i], inv);
+    }
+}
+
+void String_To_Moves(const char *str)
+{
+    uint32_t idx = 0;   // index into moves/types
+    uint32_t i = 0;     // index into string
+    g_move_count = 0; 	// reset this piece of shit
+
+    while (str[i] != '\0' && idx < MAX_CUBE_MOVES)
+    {
+        CubeMove move;
+        MoveType type = MOVE_NORMAL;
+
+        // 1. Parse move
+        switch (str[i])
+        {
+            case 'R':
+            	move = MOVE_R;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'U':
+            	move = MOVE_U;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'F':
+            	move = MOVE_F;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'L':
+            	move = MOVE_L;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'D':
+            	move = MOVE_D;
+            	type = MOVE_NORMAL;
+            	break;
+            case 'B':
+            	move = MOVE_B;
+            	type = MOVE_NORMAL;
+            	break;
+
+            case 'r':
+            	move = MOVE_R;
+            	type = MOVE_PRIME;
+            	break;
+            case 'u':
+            	move = MOVE_U;
+            	type = MOVE_PRIME;
+            break;
+            case 'f':
+            	move = MOVE_F;
+            	type = MOVE_PRIME;
+            	break;
+            case 'l':
+            	move = MOVE_L;
+            	type = MOVE_PRIME;
+            	break;
+            case 'd':
+            	move = MOVE_D;
+            	type = MOVE_PRIME;
+            	break;
+            case 'b':
+            	move = MOVE_B;
+            	type = MOVE_PRIME;
+            	break;
+
+            default:
+            	// If we get here didn't we fuck up the string???
+                i++;
+                printf("WE FUCKED UP");
+                continue;
+        }
+
+
+        // Store
+        moves[idx] = move;
+        types[idx] = type;
+        idx++;
+        i++;
+    }
+    g_move_count = idx;
+}
+
+
+void Cube_Execute_String(const char *str)
+{
+    String_To_Moves(str);
+    Cube_Execute();
+}
+
+void Flower_Pattern(void)
+{
+	const char *pattern = "RBUUlbRlfBLBDDlfUUDD";
+	Cube_Execute_String(pattern);
+}
+void Dot_Pattern(void){
+	const char *pattern = "URlFbUdl";
+	Cube_Execute_String(pattern);
+}
+
+void Bird_Pattern(void){
+	 const char *pattern = "UFFRRUULLUBBUULLDLLFFUURRBB";
+	 Cube_Execute_String(pattern);
+}
+
+void Fish_Pattern(void){
+	const char *pattern = "fULDFRlUFFUUBBDDBdrB";
+	Cube_Execute_String(pattern);
+}
+
+
+void Cross_Pattern(void){
+	const char *pattern = "DRRLLuDLLFFUUDDFFRRu";
+	Cube_Execute_String(pattern);
+}
+
+void Chess_Pattern(void){
+	const char *pattern = "RRllFFBBUUDD";
+	Cube_Execute_String(pattern);
+}
+
