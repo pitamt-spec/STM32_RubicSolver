@@ -50,4 +50,12 @@ void Cube_Execute_Reverse(void);
 void monte_carlo_shuffle(uint32_t k);
 void shuffle_cube(void);
 
+uint32_t Cube_GetMoveCount(void);
+CubeMove Cube_GetMoveAt(uint32_t idx);
+MoveType Cube_GetMoveTypeAt(uint32_t idx);
+
+void StepByStep_RunBackward(uint32_t idx);
+void StepByStep_RunForward(uint32_t idx);
+
+
 #endif

@@ -139,13 +139,12 @@ int main(void)
 		//Party_LED();
 	    if(prev_mode != 2) {
 			Displ_CLS(BLACK);	 //clear display
-//			step_by_step_display(); //trial test
-			test_mode_display(); // TODO REMOVE TEST MODE
+			step_by_step_state = 0;
+			step_by_step_start_display(); //trial test
 		}
 
 	    // poll for touch
-	    test_mode_touch(); //TODO remove test mode
-//	    step_by_step_touch();
+	    step_by_step_touch();
 	}
 
 	// ----PRETTY PATTERNS ----
@@ -154,14 +153,12 @@ int main(void)
 		if(prev_mode !=3) {
 			Displ_CLS(BLACK);	 //clear display
 			//TODO add check for solved state??
-//			pretty_pattern_selected = 0; //reset every time mode is changed //TODO uncomment
-//			pattern_mode_display(); //TODO uncomment
-			step_by_step_state = 0; // reset every time mode is changed //TODO move to mode 2
-			step_by_step_start_display(); // TODO move to mode 2
+			pretty_pattern_selected = 0; //reset every time mode is changed
+			pattern_mode_display();
+
 
 		}
-//		pattern_mode_touch(); //TODO uncomment
-		step_by_step_touch(); //TODO move to mode 2
+		pattern_mode_touch();
 	}
 
 

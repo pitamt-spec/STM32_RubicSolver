@@ -133,6 +133,9 @@ void solve_mode_touch(){
 			 Displ_FillArea(20, 380, 280, 100, GREEN);
 			 Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, GREEN);
 			 //TODO TODO reshuffle alg
+			 Load_Cube();
+			 shuffle_cube();
+			 solve_state = 0;
 			 mode = INV;
 			 solve_mode_display();
 		 }
@@ -159,15 +162,14 @@ void step_by_step_start_display(){
 	Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 
 	current_move = 0;
-	//TODO change this
-	total_moves = 10;
+	total_moves = 0;
 }
 
 void step_by_step_main_display(){
 	Displ_FillArea(20, 380, 280, 90, BLACK);        // X=10, Y=380, Width=280, Height=90
 
 	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
-	Displ_WString(10, 120, "123456789012345678901234567890", Font12, 1, WHITE, BLACK); //TODO replace this with kociemba string
+	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK); //TODO replace this with kociemba string
 
 	char total_moves_str[10]; // Create a small temporary buffer
 	sprintf(total_moves_str, "%d", total_moves); // Convert number to string
@@ -205,8 +207,14 @@ void step_by_step_touch(){
 			Displ_FillArea(20, 380, 280, 90, D_GREEN);        // X=20, Y=380, Width=280, Height=100
 			Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 			step_by_step_state = 1;
-			step_by_step_main_display();
+			//step_by_step_main_display(); //idk if order matters - taokir
 			//TODO camera processing goes here (look at solve mode for inspo, need UART)
+			camera_processing_helper();
+			String_To_Moves(kociemba_string);
+			total_moves = Cube_GetMoveCount(); // TODO: Add a helper in cube.c/h
+			current_move = 0;
+			step_by_step_main_display();
+
 		}
 		// PREV
 		else if (step_by_step_state == 1  && x >= 370 && x <= 500 && y >= 0 && y <= 75){
@@ -214,7 +222,11 @@ void step_by_step_touch(){
 				Displ_FillArea(20, 400, 130, 60, D_CYAN);        // X=10, Y=380, Width=130, Height=60
 				Displ_WString(60, 420, "PREV", Font20, 1, WHITE, D_CYAN);
 				Touch_WaitForUntouch(2000); // debounce
-				current_move --;
+
+				current_move--; /*Taokir added*/
+			    StepByStep_RunBackward(current_move); /*Taokir added*/
+//			    step_by_step_main_display(); // is this needed here?
+
 				//TODO move cube (use curr move to index into kociemba)
 
 				char curr_move_str[10]; // Create a small temporary buffer
@@ -235,8 +247,11 @@ void step_by_step_touch(){
 				Displ_FillArea(170, 400, 130, 60, D_BLUE);        // X=140, Y=180, Width=130, Height=60
 				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, D_BLUE);
 				Touch_WaitForUntouch(2000); // debounce
+				StepByStep_RunForward(current_move);
 
 				current_move++;
+//			    step_by_step_main_display(); /*Taokir added*/
+
 				if(current_move == 1){
 					Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
 					Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DD_CYAN);

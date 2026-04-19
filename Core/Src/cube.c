@@ -237,6 +237,39 @@ void shuffle_cube(void){
 	Cube_Execute();
 }
 
+/*Step-by-Step Helpers*/
+uint32_t Cube_GetMoveCount(void) {
+    return g_move_count;
+}
+
+CubeMove Cube_GetMoveAt(uint32_t idx) {
+    if (idx >= g_move_count) return MOVE_COUNT;
+    return moves[idx];
+}
+
+MoveType Cube_GetMoveTypeAt(uint32_t idx) {
+    if (idx >= g_move_count) return MOVE_NORMAL;
+    return types[idx];
+}
+
+void StepByStep_RunForward(uint32_t idx) {
+    CubeMove move = Cube_GetMoveAt(idx);
+    MoveType type = Cube_GetMoveTypeAt(idx);
+    Cube_Move(move, type);
+}
+
+void StepByStep_RunBackward(uint32_t idx) {
+    CubeMove move = Cube_GetMoveAt(idx);
+    MoveType type = Cube_GetMoveTypeAt(idx);
+
+    MoveType inv;
+    if (type == MOVE_NORMAL) inv = MOVE_PRIME;
+    else if (type == MOVE_PRIME) inv = MOVE_NORMAL;
+    else inv = MOVE_DOUBLE;
+
+    Cube_Move(move, inv);
+}
+
 /*Start patterns*/
 void Cube_Execute_String(const char *str)
 {
