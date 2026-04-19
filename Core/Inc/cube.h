@@ -47,5 +47,7 @@ void Cross_Pattern(void);
 void Chess_Pattern(void);
 
 void Cube_Execute_Reverse(void);
+void monte_carlo_shuffle(uint32_t k);
+void shuffle_cube(void);
 
 #endif

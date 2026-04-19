@@ -305,7 +305,7 @@ void test_mode_touch(){
 		else if (x >= 370 && x <= 635 && y >= 180 && y <= 295) {
 			Displ_FillArea(10, 180, 280, 120, D_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, D_GREEN);
-			Turn_LED_Off(); // change this to change alg
+			shuffle_cube(); // change this to change alg
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 			Displ_FillArea(10, 180, 280, 120, DD_GREEN);
 			Displ_WString(70, 230, "ALGORITHM 2", Font20, 1, WHITE, DD_GREEN);

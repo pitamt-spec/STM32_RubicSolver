@@ -206,7 +206,36 @@ void String_To_Moves(const char *str)
     g_move_count = idx;
 }
 
+/*Monte claro algo*/
+void monte_carlo_shuffle(uint32_t k)
+{
+    if (k > MAX_CUBE_MOVES) {
+        k = MAX_CUBE_MOVES;
+    }
 
+    g_move_count = 0;
+
+    for (uint32_t i = 0; i < k; i++)
+    {
+        CubeMove move = (CubeMove)(rand() % MOVE_COUNT);
+
+        int r = rand() % 2;
+        MoveType type;
+        if (r == 0) type = MOVE_NORMAL;
+        else type = MOVE_PRIME;
+
+        moves[i] = move;
+        types[i] = type;
+        g_move_count++;
+    }
+}
+
+void shuffle_cube(void){
+	monte_carlo_shuffle(25);
+	Cube_Execute();
+}
+
+/*Start patterns*/
 void Cube_Execute_String(const char *str)
 {
     String_To_Moves(str);
