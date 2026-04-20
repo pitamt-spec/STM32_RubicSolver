@@ -197,6 +197,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM4)
 	{
 	    step_count++;
+
 	    if (step_count >= step_target) stepper_done = 1;
 	}
 }

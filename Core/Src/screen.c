@@ -96,7 +96,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 50, 280, 100, RED);
 			Displ_WString(115, 90, "Normal", Font20, 1, WHITE, RED);
 			mode = NORMAL;
-			speed = 100;
+			speed = 50;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -105,7 +105,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 160, 280, 100, RED);
 			Displ_WString(130, 200, "Fast", Font20, 1, WHITE, RED);
 			mode = FAST;
-			speed = 50;
+			speed = 10;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -141,6 +141,7 @@ void solve_mode_touch(){
 			 shuffle_cube();
 			 solve_state = 0;
 			 mode = INV;
+			 g_solve_mode = INV;
 			 solve_mode_display();
 		 }
 

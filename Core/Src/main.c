@@ -258,14 +258,17 @@ int main(void)
 		switch(mode){
 		case 1:
 		  mode4();
+		  g_solve_mode = INV;
 		  prev_mode = 4;
 		  break;
 		case 2:
 		  mode3();
+		  g_solve_mode = INV;
 		  prev_mode = 3;
 		  break;
 		case 3:
 		  mode2();
+		  g_solve_mode = INV;
 		  prev_mode = 2;
 		  break;
 		default: // else
