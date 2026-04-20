@@ -15,14 +15,6 @@
 #include "z_touch_XPT2046.h"
 #include <stdint.h>
 
-extern char kociemba_string[64];
-extern uint8_t rx_kociemba[64];
-extern volatile uint8_t solve_ready_flag;
-extern uint8_t tx_start[];
-extern UART_HandleTypeDef huart2;
-extern uint8_t step_by_step_state;
-extern uint8_t total_moves;
-extern uint8_t current_move;
 
 typedef enum
 {
@@ -32,6 +24,18 @@ typedef enum
 	PARTY = 3,
 	INV = 4
 } SolveMode;
+extern char kociemba_string[64];
+extern uint8_t rx_kociemba[64];
+extern volatile uint8_t solve_ready_flag;
+extern uint8_t tx_start[];
+extern UART_HandleTypeDef huart2;
+extern uint8_t step_by_step_state;
+extern uint8_t total_moves;
+extern uint8_t current_move;
+extern volatile SolveMode g_solve_mode;
+extern volatile int SPEED;
+
+
 
 void camera_processing_helper();
 void camera_processing_display();
@@ -42,6 +46,7 @@ void solve_reshuffle_display();
 void solve_mode_display();
 void solve_mode_touch();
 
+void step_by_step_solver();
 void step_by_step_start_display();
 void step_by_step_main_display();
 void step_by_step_done_display();

@@ -69,5 +69,6 @@ void Motor_SetDirection(const Motor *mmotor);
 void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps);
 /*the main function for motor to configure the cube to move*/
 void Motor_RunMove(Motor *mmotor, uint32_t steps);
-
+/*Select what LED to turn on*/
+void Motor_LED_On(const Motor *mmotr);
 #endif

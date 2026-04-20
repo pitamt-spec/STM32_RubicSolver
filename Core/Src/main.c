@@ -111,6 +111,7 @@ int main(void)
 	    if(prev_mode != 1) {
 			Displ_CLS(BLACK);	 //clear display
 			solve_state = 0;
+			Load_Cube();
 			solve_mode_display();
 		}
 	    // poll for touch
@@ -140,17 +141,31 @@ int main(void)
 	    if(prev_mode != 2) {
 			Displ_CLS(BLACK);	 //clear display
 			step_by_step_state = 0;
-			step_by_step_start_display(); //trial test
+			Load_Cube();
+			step_by_step_start_display();
 		}
 
-	    // poll for touch
-	    step_by_step_touch();
+	    // poll for touch regardless of state
+		//if(step_by_step_state == 0 || step_by_step_state == 2){
+		step_by_step_touch();
+
+		// If we have already pressed a button and are waiting for the Pi
+		if (step_by_step_state == 1) {
+			if (solve_ready_flag == 1) {
+				// THE PI RESPONDED!
+				solve_ready_flag = 0; // Clear flag
+				step_by_step_state = 1;
+				step_by_step_solver();
+			}
+		}
+
 	}
 
 	// ----PRETTY PATTERNS ----
 	// CUBE MUST BE SOLVED
 	void mode3() {
 		if(prev_mode !=3) {
+			All_White();
 			Displ_CLS(BLACK);	 //clear display
 			//TODO add check for solved state??
 			pretty_pattern_selected = 0; //reset every time mode is changed
@@ -165,6 +180,7 @@ int main(void)
 	// ---- MANUAL MODE ----
 	void mode4() {
 	    if(prev_mode != 4){
+	    	All_White();
 			Displ_CLS(BLACK);	 //clear display
 			manual_display();
 	    }
@@ -241,20 +257,20 @@ int main(void)
 		int mode = (ADC_VAL / 1024) + 1; // four modes (1-4)
 		switch(mode){
 		case 1:
-		  mode1();
-		  prev_mode = 1;
+		  mode4();
+		  prev_mode = 4;
 		  break;
 		case 2:
-		  mode2();
-		  prev_mode = 2;
-		  break;
-		case 3:
 		  mode3();
 		  prev_mode = 3;
 		  break;
+		case 3:
+		  mode2();
+		  prev_mode = 2;
+		  break;
 		default: // else
-		  mode4();
-		  prev_mode = 4;
+		  mode1();
+		  prev_mode = 1;
 		  break;
 		}
 

@@ -50,6 +50,7 @@ void Set_Ring(int ring, int r, int g, int b)
 	}
 
 }
+
 void Set_All_Next_Color(void)
 {
     static uint8_t mode = 0;
@@ -109,10 +110,10 @@ void Load_Cube(void)
 	Set_Ring(LED_3,255,0,0); // R
 	Set_Ring(LED_4, 0,0,255); // B
 	Set_Ring(LED_5,255,130, 0); // Yellow
-	Set_Ring(LED_6,255,50,0); // Orange
+	Set_Ring(LED_6,255,60,0); // Orange
 
 
-	Set_Brightness(8);
+	Set_Brightness(6);
 	WS2812_Send();
 }
 /*
@@ -180,7 +181,7 @@ void Party_LED(void)
         }
     }
 
-    Set_Brightness(20);
+    Set_Brightness(4);
     WS2812_Send();
     offset = (offset + 1) % 24;
 }

@@ -5,7 +5,8 @@
  *      Author: mjbarbat
  */
 #include "screen.h"
-
+volatile SolveMode g_solve_mode = INV;
+volatile int 	  SPEED 	   = 100;
 // helper function for camera processing
 // used by solve_mode_touch() and step_by_step_touch()
 void camera_processing_helper(){
@@ -82,6 +83,7 @@ void solve_mode_touch(){
 	uint16_t y = 0;
 	uint8_t isTouch = 0;
 	SolveMode mode = INV; // default mode
+	int speed = 100;
 
 	// Get touch data
 	Touch_GetXYtouch(&x, &y, &isTouch);
@@ -94,7 +96,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 50, 280, 100, RED);
 			Displ_WString(115, 90, "Normal", Font20, 1, WHITE, RED);
 			mode = NORMAL;
-
+			speed = 100;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -103,6 +105,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 160, 280, 100, RED);
 			Displ_WString(130, 200, "Fast", Font20, 1, WHITE, RED);
 			mode = FAST;
+			speed = 50;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -111,6 +114,7 @@ void solve_mode_touch(){
 			Displ_FillArea(20, 270, 280, 100, RED);
 			Displ_WString(95, 310, "Super Fast", Font20, 1, WHITE, RED);
 			mode = SUPER_FAST;
+			speed = 1;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -125,6 +129,7 @@ void solve_mode_touch(){
 			Displ_WString(175, 420, "Y", Font24, 1, BLUE, DDDD_WHITE);
 			Displ_WString(190, 420, "!", Font24, 1, MAGENTA, DDDD_WHITE);
 			mode = PARTY;
+			speed = 1;
 			Touch_WaitForUntouch(1000); // debounce (remove once we add motor code?)
 		}
 
@@ -132,7 +137,6 @@ void solve_mode_touch(){
 		else if (solve_state == 2 && x >= 370 && x <= 650 && y >= 0 && y <= 95) {
 			 Displ_FillArea(20, 380, 280, 100, GREEN);
 			 Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, GREEN);
-			 //TODO TODO reshuffle alg
 			 Load_Cube();
 			 shuffle_cube();
 			 solve_state = 0;
@@ -140,16 +144,32 @@ void solve_mode_touch(){
 			 solve_mode_display();
 		 }
 
-		// TODO add small delay?
 		// start solving cube
 		if(mode != INV){
 			solve_state = 1;
 			//TODO NEED TO MAKE MODE GLOBAL
+			g_solve_mode = mode;
+			SPEED = speed;
 			camera_processing_helper();
-			//cube_solving_helper(mode);
-			//solve_reshuffle_display();
 		}
 	}
+}
+
+void step_by_step_solver() {
+    // Convert the string into moves[] and types[] arrays
+    String_To_Moves(kociemba_string);
+
+    total_moves = Cube_GetMoveCount();
+    current_move = 0;
+
+    step_by_step_main_display();
+    if(current_move < total_moves){
+    	step_by_step_touch();
+    }
+    else{
+		solve_reshuffle_display();
+		step_by_step_state = 2;
+    }
 }
 
 // Display menu for Step-by_step
@@ -162,14 +182,16 @@ void step_by_step_start_display(){
 	Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 
 	current_move = 0;
-	total_moves = 0;
+	//total_moves = 0;
 }
 
 void step_by_step_main_display(){
-	Displ_FillArea(20, 380, 280, 90, BLACK);        // X=10, Y=380, Width=280, Height=90
+	Displ_FillArea(20, 380, 280, 100, BLACK);        // X=10, Y=380, Width=280, Height=90
 
+	kociemba_string[total_moves] = '\0';
 	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
 	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK); //TODO replace this with kociemba string
+
 
 	char total_moves_str[10]; // Create a small temporary buffer
 	sprintf(total_moves_str, "%d", total_moves); // Convert number to string
@@ -187,7 +209,8 @@ void step_by_step_main_display(){
 }
 
 void step_by_step_done_display(){
-	solve_reshuffle_display();
+	Displ_FillArea(20, 380, 280, 90, D_GREEN);
+	Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, D_GREEN);
 }
 
 // Poll for touch for step-by-step mode (2)
@@ -207,13 +230,7 @@ void step_by_step_touch(){
 			Displ_FillArea(20, 380, 280, 90, D_GREEN);        // X=20, Y=380, Width=280, Height=100
 			Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 			step_by_step_state = 1;
-			//step_by_step_main_display(); //idk if order matters - taokir
-			//TODO camera processing goes here (look at solve mode for inspo, need UART)
 			camera_processing_helper();
-			String_To_Moves(kociemba_string);
-			total_moves = Cube_GetMoveCount(); // TODO: Add a helper in cube.c/h
-			current_move = 0;
-			step_by_step_main_display();
 
 		}
 		// PREV
@@ -223,11 +240,8 @@ void step_by_step_touch(){
 				Displ_WString(60, 420, "PREV", Font20, 1, WHITE, D_CYAN);
 				Touch_WaitForUntouch(2000); // debounce
 
-				current_move--; /*Taokir added*/
-			    StepByStep_RunBackward(current_move); /*Taokir added*/
-//			    step_by_step_main_display(); // is this needed here?
-
-				//TODO move cube (use curr move to index into kociemba)
+				current_move--;
+			    StepByStep_RunBackward(current_move);
 
 				char curr_move_str[10]; // Create a small temporary buffer
 				sprintf(curr_move_str, "%d", current_move); // Convert number to string
@@ -235,22 +249,29 @@ void step_by_step_touch(){
 				Displ_FillArea(90, 150, 20, 20, BLACK);
 				Displ_WString(90, 150, curr_move_str, Font20, 1, WHITE, BLACK);
 
-				Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
-				Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DD_CYAN);
+				if(current_move == 0){
+					Displ_FillArea(20, 400, 130, 60, DDD_WHITE);        // X=10, Y=380, Width=130, Height=60
+					Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DDD_WHITE);
+				}
+				else{
+					Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
+					Displ_WString(60, 420, "PREV", Font20, 1, WHITE, DD_CYAN);
+				}
+
 			}
 		}
 
 		// NEXT
 		else if (step_by_step_state == 1  && x >= 510 && x <= 645 && y >= 0 && y <= 75){
 			if(current_move < total_moves){
-				// TODO move cube (use curr move to index into kociemba)
 				Displ_FillArea(170, 400, 130, 60, D_BLUE);        // X=140, Y=180, Width=130, Height=60
 				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, D_BLUE);
 				Touch_WaitForUntouch(2000); // debounce
+
+				//Cube_Move(moves[current_move], types[current_move]);
 				StepByStep_RunForward(current_move);
 
 				current_move++;
-//			    step_by_step_main_display(); /*Taokir added*/
 
 				if(current_move == 1){
 					Displ_FillArea(20, 400, 130, 60, DD_CYAN);        // X=10, Y=380, Width=130, Height=60
@@ -263,17 +284,26 @@ void step_by_step_touch(){
 				Displ_FillArea(90, 150, 20, 20, BLACK);
 				Displ_WString(90, 150, curr_move_str, Font20, 1, WHITE, BLACK);
 
-				Displ_FillArea(170, 400, 130, 60, DD_BLUE);        // X=140, Y=180, Width=130, Height=60
-				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, DD_BLUE);
 
+				if (current_move == total_moves) {
+					step_by_step_done_display();
+					step_by_step_state = 2; // Move to reshuffle state
+				} else {
+					// Only redraw the blue button if we aren't done yet
+					Displ_FillArea(170, 400, 130, 60, DD_BLUE);
+					Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, DD_BLUE);
+				}
 			}
-
-			else{
-				step_by_step_done_display();
-			}
-
-
 		}
+
+		else if (step_by_step_state == 2 && x >= 370 && x <= 650 && y >= 0 && y <= 95) {
+			 Displ_FillArea(20, 380, 280, 90, GREEN);
+			 Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, GREEN);
+			 Displ_FillArea(0, 90, 320, 100, BLACK);
+			 shuffle_cube();
+			 step_by_step_state = 0;
+			 step_by_step_start_display();
+		 }
 	}
 }
 
@@ -364,8 +394,8 @@ void default_pattern_buttons(){
 	Displ_WString(35, 360, "Crosses", Font20, 1, WHITE, DD_CYAN);
 
 	// Chess
-	Displ_FillArea(160, 310, 140, 120, DD_CYAN);        // X=160, Y=50, Width=140, Height=120
-	Displ_WString(195, 360, "Chess", Font20, 1, WHITE, DD_CYAN);
+	Displ_FillArea(160, 310, 140, 120, DD_BLUE);        // X=160, Y=50, Width=140, Height=120
+	Displ_WString(180, 360, "SHUFFLE", Font20, 1, WHITE, DD_BLUE);
 }
 
 // Display menu for pretty patterns (3)
@@ -489,11 +519,11 @@ void pattern_mode_touch(){
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);
 		}
 
-		// Check Chess
+		// Check Shuffle
 		else if (!pretty_pattern_selected && x >= 570 && x <= 680 && y >= 50 && y <= 170) {
 			pretty_pattern_selected = 1;
-			Displ_FillArea(160, 310, 140, 120, D_CYAN);
-			Displ_WString(195, 360, "Chess", Font20, 1, WHITE, D_CYAN);
+			Displ_FillArea(160, 310, 140, 120, D_BLUE);
+			Displ_WString(180, 360, "SHUFFLE", Font20, 1, WHITE, D_BLUE);
 
 			//make other boxes grey
 			Displ_FillArea(10, 50, 140, 120, DD_WHITE);
@@ -502,8 +532,8 @@ void pattern_mode_touch(){
 			Displ_FillArea(160, 180, 140, 120, DD_WHITE);
 			Displ_FillArea(10, 310, 140, 120, DD_WHITE);
 
-			// R L' F2 B2 U2 D2 R L'
-			Chess_Pattern();
+
+			shuffle_cube();
 			// reset button appears
 			Displ_FillArea(10, 440, 290, 30, D_GREEN);
 			Displ_WString(130, 450, "RESET", Font16, 1, WHITE, D_GREEN);

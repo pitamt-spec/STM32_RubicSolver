@@ -1,5 +1,6 @@
 #include "motor.h"
-
+#include "NeoPixel.h"
+#include "screen.h"
 /*---------pins---------------------------- */
 //static TIM_HandleTypeDef *motor_tim = NULL; // technically this will always be 4
 
@@ -77,7 +78,72 @@ void Motor_SetDirection(const Motor *mmotor)
 	default: break;
 	}
 }
+void Motor_LED_On(const Motor *mmotor){
+	if (mmotor == NULL) return;
+	// Make everything whtie
 
+    switch (mmotor->ID)
+    {
+        case MOTOR_1:
+        	Set_Ring(LED_1, 0, 255, 0);
+
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_3, 255, 255, 255);
+        	Set_Ring(LED_4, 255, 255, 255);
+        	Set_Ring(LED_5, 255, 255, 255);
+        	Set_Ring(LED_6, 255, 255, 255);
+        	break;
+        case MOTOR_2:
+        	Set_Ring(LED_6, 255, 60, 0);
+
+        	Set_Ring(LED_1, 255, 255, 255);
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_3, 255, 255, 255);
+        	Set_Ring(LED_4, 255, 255, 255);
+        	Set_Ring(LED_5, 255, 255, 255);
+        	break;
+        case MOTOR_3:
+        	Set_Ring(LED_1, 255, 255, 255);
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_3, 255, 255, 255);
+        	Set_Ring(LED_4, 255, 255, 255);
+        	Set_Ring(LED_5, 255, 255, 255);
+        	Set_Ring(LED_6, 255, 255, 255);
+        	break;
+        case MOTOR_4:
+        	Set_Ring(LED_4, 0, 0, 255);
+
+        	Set_Ring(LED_1, 255, 255, 255);
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_3, 255, 255, 255);
+        	Set_Ring(LED_6, 255, 255, 255);
+        	Set_Ring(LED_5, 255, 255, 255);
+
+        	break;
+        case MOTOR_5:
+        	Set_Ring(LED_5, 255, 130, 0);
+
+        	Set_Ring(LED_1, 255, 255, 255);
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_3, 255, 255, 255);
+        	Set_Ring(LED_6, 255, 255, 255);
+        	Set_Ring(LED_4, 255, 255, 255);
+        	break;
+        case MOTOR_6:
+        	Set_Ring(LED_3, 255, 0, 0);
+
+        	Set_Ring(LED_1, 255, 255, 255);
+        	Set_Ring(LED_2, 255, 255, 255);
+        	Set_Ring(LED_5, 255, 255, 255);
+        	Set_Ring(LED_6, 255, 255, 255);
+        	Set_Ring(LED_4, 255, 255, 255);
+        	break;
+        default: break;
+    }
+
+	Set_Brightness(1);
+	WS2812_Send();
+}
 // Send Steps to a given motor
 void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
 {
@@ -108,7 +174,6 @@ void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
     active_motor = NULL;
 }
 
-// QUESTION what is the difference between this and run move?
 void Motor_RunMove(Motor *mmotor, uint32_t steps)
 {
 	if (mmotor == NULL || mmotor->clk == NULL || steps == 0U) return;
@@ -116,8 +181,12 @@ void Motor_RunMove(Motor *mmotor, uint32_t steps)
     //Motor_DisableAll();
     Motor_Select(mmotor);
     Motor_SetDirection(mmotor);
+    if (g_solve_mode != PARTY) Motor_LED_On(mmotor);
+    else Party_LED();
+
     Motor_SendSteps_Blocking(mmotor,steps);
-    HAL_Delay(100);
+    HAL_Delay(SPEED);
+    All_White();
     //Motor_DisableAll();
 }
 

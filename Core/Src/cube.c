@@ -194,7 +194,7 @@ void String_To_Moves(const char *str)
             default:
             	// If we get here didn't we fuck up the string???
                 i++;
-                printf("WE FUCKED UP");
+                //printf("WE FUCKED UP");
                 continue;
         }
 
