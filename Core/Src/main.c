@@ -259,6 +259,7 @@ int main(void)
 		case 1:
 		  mode4();
 		  g_solve_mode = INV;
+
 		  prev_mode = 4;
 		  break;
 		case 2:

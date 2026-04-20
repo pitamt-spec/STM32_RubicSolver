@@ -27,6 +27,8 @@ void camera_processing_helper(){
 }
 
 void cube_solving_helper(uint8_t speed){ //only calling this once pi responds
+	total_moves = Cube_GetMoveCount();
+
 	Displ_FillArea(20, 380, 280, 100, DDD_WHITE);
 	Displ_WString(45, 420, "Solving Cube!", Font24, 1, WHITE, DDD_WHITE);
 	if(speed == PARTY){
@@ -43,6 +45,17 @@ void cube_solving_helper(uint8_t speed){ //only calling this once pi responds
 
 // Display for last state of solve mode. Gives option to reshuffle
 void solve_reshuffle_display(){
+	kociemba_string[total_moves] = '\0';
+	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
+	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK);
+
+	// TODO fix total moves and kociemba bug
+//	char total_moves_str[10]; // Create a small temporary buffer
+//	sprintf(total_moves_str, "%d", total_moves); // Convert number to string
+//
+//	Displ_WString(10, 160, "Total Moves: ", Font20, 1, WHITE, BLACK);
+//	Displ_WString(280, 120, total_moves_str, Font12, 1, WHITE, BLACK);
+
 	Displ_FillArea(20, 380, 280, 100, D_GREEN);
 	Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, D_GREEN);
 
@@ -191,7 +204,7 @@ void step_by_step_main_display(){
 
 	kociemba_string[total_moves] = '\0';
 	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
-	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK); //TODO replace this with kociemba string
+	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK);
 
 
 	char total_moves_str[10]; // Create a small temporary buffer
