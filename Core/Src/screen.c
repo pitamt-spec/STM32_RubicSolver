@@ -37,10 +37,9 @@ void cube_solving_helper(uint8_t speed){ //only calling this once pi responds
 	}
 	else{
 		Load_Cube();
-		Cube_Execute_String(kociemba_string); //TODO add speed input
+		Cube_Execute_String(kociemba_string);
 	}
 	solve_reshuffle_display();
-	// TODO TODO check for solved state??
 }
 
 // Display for last state of solve mode. Gives option to reshuffle
@@ -49,18 +48,10 @@ void solve_reshuffle_display(){
 	Displ_WString(10, 100, "Algorithm: ", Font20, 1, WHITE, BLACK);
 	Displ_WString(10, 120, kociemba_string, Font12, 1, WHITE, BLACK);
 
-	// TODO fix total moves and kociemba bug
-//	char total_moves_str[10]; // Create a small temporary buffer
-//	sprintf(total_moves_str, "%d", total_moves); // Convert number to string
-//
-//	Displ_WString(10, 160, "Total Moves: ", Font20, 1, WHITE, BLACK);
-//	Displ_WString(280, 120, total_moves_str, Font12, 1, WHITE, BLACK);
 
 	Displ_FillArea(20, 380, 280, 100, D_GREEN);
 	Displ_WString(90, 420, "RESHUFFLE", Font24, 1, WHITE, D_GREEN);
 
-	// TODO add total moves
-	// TODO add timer to show time it took to solve
 }
 
 // Display menu for solve mode (1)
@@ -102,7 +93,6 @@ void solve_mode_touch(){
 	Touch_GetXYtouch(&x, &y, &isTouch);
 
 	if (isTouch) {
-		//printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
 
 		// Check NORMAL
 		if (solve_state == 0 && x >= 370 && x <= 650 && y >= 330 && y <= 430) {
@@ -161,7 +151,6 @@ void solve_mode_touch(){
 		// start solving cube
 		if(mode != INV){
 			solve_state = 1;
-			//TODO NEED TO MAKE MODE GLOBAL
 			g_solve_mode = mode;
 			SPEED = speed;
 			camera_processing_helper();
@@ -196,7 +185,6 @@ void step_by_step_start_display(){
 	Displ_WString(115, 420, "START", Font20, 1, WHITE, DD_GREEN);
 
 	current_move = 0;
-	//total_moves = 0;
 }
 
 void step_by_step_main_display(){
@@ -282,7 +270,6 @@ void step_by_step_touch(){
 				Displ_WString(200, 420, "NEXT", Font20, 1, WHITE, D_BLUE);
 				Touch_WaitForUntouch(2000); // debounce
 
-				//Cube_Move(moves[current_move], types[current_move]);
 				StepByStep_RunForward(current_move);
 
 				current_move++;
@@ -430,8 +417,6 @@ void pattern_mode_touch(){
 	Touch_GetXYtouch(&x, &y, &isTouch);
 
 	if (isTouch) {
-//		printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
-//		printf("State: %d \r\n", pretty_pattern_selected);
 
 		// Check Flowers
 		if (!pretty_pattern_selected && x >= 370 && x <= 490 && y >= 310 && y <= 410) {
@@ -628,7 +613,6 @@ void manual_mode_touch(){
 	Touch_GetXYtouch(&x, &y, &isTouch);
 
 	if (isTouch) {
-		// printf("Touch at X: %d, Y: %d\r\n", x, y); //For debugging
 
 		// CHECK F
 		if (x >= 370 && x <= 500 && y >= 370 && y <= 435) {

@@ -2,13 +2,13 @@
 #include "NeoPixel.h"
 #include "screen.h"
 /*---------pins---------------------------- */
-//static TIM_HandleTypeDef *motor_tim = NULL; // technically this will always be 4
+//static TIM_HandleTypeDef *motor_tim = NULL;
 
 volatile uint32_t step_count = 0;
 volatile uint32_t step_target = 0;
 volatile uint8_t stepper_done = 0;
 
-static Motor *active_motor = NULL; /*might be used for debug*/
+static Motor *active_motor = NULL;
 
 //Initialize Motor
 void Motor_Init(TIM_HandleTypeDef *htim_pwm, Motor *mmotor, MotorId id)
@@ -163,10 +163,10 @@ void Motor_SendSteps_Blocking(Motor *mmotor, uint32_t steps)
 
     /*
      * Force the CPU to handle stepper to finish
-     * Should consider recovering from going past 50/100 steps
      * For future hygine i should add a timeout var
      * if timeout hits then we recover somehow
      * */
+
     while (!stepper_done){}
     /* stop the timer */
     HAL_TIM_PWM_Stop(mmotor->clk, TIM_CHANNEL_1);
@@ -191,7 +191,7 @@ void Motor_RunMove(Motor *mmotor, uint32_t steps)
 }
 
 
-/*The interrupt that counts up to fifty.*/
+/*The interrupt that counts up to steps.*/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM4)
@@ -206,15 +206,3 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  * Motor selection is handled by the mux.
  */
 
-
-
-/*Wire enable to voltage*/
-//void Motor_EnableSelected(void)
-//{
-//    HAL_GPIO_WritePin(STPR_EN_port, STEPPER_EN_pin, GPIO_PIN_RESET);
-//}
-
-//void Motor_DisableAll(void)
-//{
-//    HAL_GPIO_WritePin(STPR_EN_port, STEPPER_EN_pin, GPIO_PIN_SET);
-//}

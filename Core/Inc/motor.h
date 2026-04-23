@@ -4,21 +4,10 @@
 #include "main.h"
 #include <stdint.h>
 
-/*
- * TODO: Set up a helper function for acceleration profile
- *           - Will probably be similar to the lab dimming
- *           - We have the clk info so just adjust ARR from observation
- *           - Test code and iterate
- * */
 
 
-/*
- * 	needs to be an extern to share to our ISR*/
-/*	Need to refactor this to standarize
- *	but for testing i need to lock in
- **/
 extern volatile uint32_t step_count; 	/*count up steps*/
-extern volatile uint32_t step_target;	/*target step (50 or 100) for our ISR*/
+extern volatile uint32_t step_target;	/*target step for our ISR*/
 extern volatile uint8_t stepper_done;	/*might be a useful flag for our program*/
 
 typedef enum
@@ -47,15 +36,7 @@ typedef struct
 	MotorDirection DIR; /* what direction motor goes*/
 
 	TIM_HandleTypeDef *clk; /*Motor clk*/
-	/*Technically I should consider channels too*/
-	/*Should probably add the channel info too*/
-	/*
-	 * Moved these to a global bc we run one motor at a time
-	 * volatile uint32_t step_count;
-	 * volative uint32_t step_target;
-	 * volatile uint8_t = stepper_done;
-	 *
-	 * */
+
 } Motor;
 
 

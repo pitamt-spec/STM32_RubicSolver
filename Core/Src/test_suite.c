@@ -14,9 +14,9 @@ static Motor* motor6 = NULL;
 static void LED_Helper(uint8_t B, uint8_t R, uint8_t G);
 static void LED_On(const Motor *mmotor);
 static void Test_Motor(Motor *mmotor, uint32_t steps);
-static void Move_Helper(Motor *mmotor); //TODO implement
+static void Move_Helper(Motor *mmotor);
 
-static void TestSuite_RunOnce(void); //TODO implement
+static void TestSuite_RunOnce(void);
 static void Basic_Solve(void);
 
 void TestSuite_Init(Motor *mmotor1, Motor *mmotor2, Motor *mmotor3, Motor *mmotor4, Motor *mmotor5, Motor *mmotor6);

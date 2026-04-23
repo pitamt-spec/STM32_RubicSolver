@@ -1,26 +1,26 @@
 #include "cube.h"
 
-#define STEPS_90   400 // TODO remove?
-#define STEPS_180  800 //TODO remove?
+#define STEPS_90   400
+#define STEPS_180  800
 
 #define STEPS_190	844
 #define STEPS_100	444
 #define STEPS_10	44
 #define STEPS_15	66
-#define MAX_CUBE_MOVES 64 // Prevent garbage bs
+#define MAX_CUBE_MOVES 64
 
 
 static Motor *g_motors[MOVE_COUNT];
 
-//TODO: I highkey dont know what the size should be
-//MELISSA: lets start with 24??
+
 static CubeMove moves[MAX_CUBE_MOVES];
 static MoveType types[MAX_CUBE_MOVES];
 static uint32_t g_move_count = 0;
 
 static void Cube_ApplyMove(Motor *m, MoveType type);
 
-static void LED_Helper(uint8_t B, uint8_t R, uint8_t G) // TODO remove after debugging
+// STM32 debug lights
+static void LED_Helper(uint8_t B, uint8_t R, uint8_t G)
 {
     HAL_GPIO_WritePin(LED_BLUE_GPIO_Port,  LED_BLUE_Pin,  B ? GPIO_PIN_SET : GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_RED_GPIO_Port,   LED_RED_Pin,   R ? GPIO_PIN_SET : GPIO_PIN_RESET);
@@ -45,7 +45,7 @@ static void LED_FromMove(CubeMove move)
 void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6){
 	if (!m1 || !m2 || !m3 || !m4 || !m5 || !m6) return;
 
-//	g_motors[MOVE_R] = m1;
+//	  g_motors[MOVE_R] = m1;
 //    g_motors[MOVE_U] = m2;
 //    g_motors[MOVE_F] = m3;
 //    g_motors[MOVE_L] = m4;
@@ -61,7 +61,7 @@ void Cube_Init(Motor* m1, Motor* m2, Motor* m3, Motor* m4, Motor* m5, Motor* m6)
 
 }
 
-/* MELISSA: made cube move 100 then back 10 for 90 deg, and 190 and back 10 for 180 deg */
+/* Move cube 100 degrees, then back 10 degrees*/
 static void Cube_ApplyMove(Motor *m, MoveType type)
 {
     if (!m) return;
@@ -72,7 +72,6 @@ static void Cube_ApplyMove(Motor *m, MoveType type)
         m->DIR = MOTOR_DIR_CCW;
         Motor_RunMove(m, STEPS_100);
         m->DIR = MOTOR_DIR_CW;
-//        Motor_RunMove(m, (m->ID != MOTOR_4) ? STEPS_10 : STEPS_15);
         Motor_RunMove(m, STEPS_10);
         break;
 
@@ -106,7 +105,7 @@ void Cube_Move(CubeMove move, MoveType type)
 
 void Cube_Execute(void)
 {
-	if (g_move_count == 0) return; // this should be bad i think
+	if (g_move_count == 0) return;
     for (uint32_t i = 0; i <  g_move_count; i++)
     {
         Cube_Move(moves[i], types[i]);
@@ -131,7 +130,7 @@ void String_To_Moves(const char *str)
 {
     uint32_t idx = 0;   // index into moves/types
     uint32_t i = 0;     // index into string
-    g_move_count = 0; 	// reset this piece of shit
+    g_move_count = 0; 	// reset the global lenght
 
     while (str[i] != '\0' && idx < MAX_CUBE_MOVES)
     {
@@ -192,9 +191,7 @@ void String_To_Moves(const char *str)
             	break;
 
             default:
-            	// If we get here didn't we fuck up the string???
                 i++;
-                //printf("WE FUCKED UP");
                 continue;
         }
 

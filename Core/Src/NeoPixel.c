@@ -18,9 +18,7 @@ extern TIM_HandleTypeDef htim3;
 #define NEO_0 22
 #define NEO_1 44
 
-//FPF
-//#define NEO_0 26
-//#define NEO_1 53
+
 
 /*Set everything up to zero*/
 void WS2812_Init(void)
@@ -168,13 +166,13 @@ void Party_LED(void)
 	    {255,   0,  64}
 	};
 
-    for(int fran = 0; fran < 6; ++fran)
+    for(int j = 0; j < 6; ++j)
     {
         for (int i = 0; i < 24; ++i)
         {
             int shifted = (i + offset) % 24;
 
-            Set_LED(fran * 24 + i,
+            Set_LED(j * 24 + i,
                     partyColors[shifted][0],
                     partyColors[shifted][1],
                     partyColors[shifted][2]);
@@ -183,7 +181,7 @@ void Party_LED(void)
 
     Set_Brightness(4);
     WS2812_Send();
-    offset = (offset + 1) % 24;
+    offset = (offset + 4) % 24;
 }
 
 /*
@@ -204,8 +202,6 @@ void Set_Brightness (int brightness)
 
         for (int j = 1; j < 4; j++)
         {
-//        	float angle = (90 - brightness) * PI / 180;
-//          LED_Mod[i][j] = (LED_Data[i][j]) / tan(angle);
         	float angle = (90.0f - brightness) * PI / 180.0f;
         	LED_Mod[i][j] = (uint8_t)((float)LED_Data[i][j] / tanf(angle));
 
@@ -215,12 +211,7 @@ void Set_Brightness (int brightness)
 #endif
 }
 
-/*
- * SEND DATA
- * Added green, red, and blue for debugging help
- * we have a 4 MHz clock so to step down to 800 kHz we need to
- * PSC = 0, ARR = 4 (rem STM does +1)
- * */
+
 void WS2812_Send(void)
 {
     uint32_t indx = 0;
@@ -270,7 +261,6 @@ void WS2812_Send(void)
 }
 
 /*Call Back*/
-/*For milestone one we use PC8*/
 void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM3)
