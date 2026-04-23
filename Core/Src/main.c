@@ -123,7 +123,7 @@ int main(void)
 		else if (solve_state == 1) {
 			if (solve_ready_flag == 1) {
 				// THE PI RESPONDED!
-				cube_solving_helper(NORMAL); //TODO implement speed
+				cube_solving_helper(NORMAL);
 
 				solve_ready_flag = 0; // Clear flag
 				solve_state = 2;
